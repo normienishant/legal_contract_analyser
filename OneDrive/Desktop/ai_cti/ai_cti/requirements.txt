@@ -1,0 +1,14 @@
+﻿fastapi
+uvicorn
+streamlit
+requests
+beautifulsoup4
+lxml
+nltk
+sentence-transformers
+scikit-learn
+hdbscan
+numpy
+pandas
+huggingface-hub
+transformers
