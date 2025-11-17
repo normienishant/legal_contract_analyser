@@ -1,0 +1,26 @@
+SERVICE AGREEMENT
+
+This Service Agreement ("Agreement") is entered into on [Date] between Company A ("Provider") and Company B ("Client").
+
+WHEREAS, Provider offers certain services and Client wishes to engage Provider for such services;
+
+NOW, THEREFORE, the parties agree as follows:
+
+1. Services. Provider agrees to provide the following services: software development, maintenance, and support services as described in Exhibit A.
+
+2. Payment Terms. Client agrees to pay Provider $10,000 per month, due on the first day of each month. Late payments shall incur a penalty of 5% per month.
+
+3. Term. This Agreement shall commence on the Effective Date and continue for a period of one (1) year, and shall automatically renew for successive one-year terms unless either party provides written notice of termination at least 30 days prior to the end of the then-current term.
+
+4. Termination. Either party may terminate this Agreement immediately upon written notice if the other party breaches any material term of this Agreement and fails to cure such breach within 30 days of written notice.
+
+5. Liability. Provider's liability shall be limited to the total amount paid by Client in the 12 months preceding the claim. Client agrees to indemnify and hold harmless Provider from any claims arising from Client's use of the services.
+
+6. Confidentiality. Each party agrees to maintain the confidentiality of all proprietary information received from the other party. This obligation shall survive termination of this Agreement indefinitely.
+
+7. Governing Law. This Agreement shall be governed by the laws of the State of California, and any disputes shall be resolved through binding arbitration in San Francisco, California.
+
+8. Entire Agreement. This Agreement constitutes the entire understanding between the parties and supersedes all prior agreements.
+
+IN WITNESS WHEREOF, the parties have executed this Agreement as of the date first written above.
+
