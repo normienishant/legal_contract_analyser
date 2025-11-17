@@ -9,11 +9,11 @@ class Settings(BaseSettings):
     
     # Server
     backend_host: str = "0.0.0.0"
-    backend_port: int = 8000
-    environment: str = "development"
+    backend_port: int = int(os.getenv("PORT", "8000"))
+    environment: str = os.getenv("ENVIRONMENT", "development")
     
     # Database
-    database_url: str = "sqlite:///./contract_analyzer.db"
+    database_url: str = os.getenv("DATABASE_URL", "sqlite:///./contract_analyzer.db")
     
     # ML Configuration
     ml_mode: Literal["ml", "rules"] = "ml"
