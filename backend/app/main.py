@@ -4,9 +4,17 @@ import sys
 from pathlib import Path
 
 # Add the backend directory to Python path for imports
-backend_dir = Path(__file__).parent.parent
-if str(backend_dir) not in sys.path:
-    sys.path.insert(0, str(backend_dir))
+# This ensures app module can be found regardless of working directory
+backend_dir = Path(__file__).parent.parent.absolute()
+backend_dir_str = str(backend_dir)
+if backend_dir_str not in sys.path:
+    sys.path.insert(0, backend_dir_str)
+
+# Also add parent directory in case we're running from a different location
+parent_dir = backend_dir.parent.absolute()
+parent_dir_str = str(parent_dir)
+if parent_dir_str not in sys.path:
+    sys.path.insert(0, parent_dir_str)
 
 import logging
 from fastapi import FastAPI
