@@ -7,7 +7,7 @@ from typing import List, Optional
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, status, Header
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from app.db import get_db, init_db
+from app.db import get_db
 from app.models.analysis import Analysis, Clause
 from app.schemas.analysis import (
     AnalysisResponse,
@@ -22,9 +22,6 @@ from app.core.config import settings
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
-
-# Initialize database on startup
-init_db()
 
 # Initialize services
 extractor = DocumentExtractor()

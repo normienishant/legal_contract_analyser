@@ -1,77 +1,67 @@
 """Migration script to add session_id column to analyses table."""
-import sqlite3
-import os
-from pathlib import Path
+import logging
+from sqlalchemy import inspect, text
+from app.db import engine
+from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 def migrate_database():
     """Add session_id column to analyses table if it doesn't exist."""
-    # Find database file
-    db_paths = [
-        Path(__file__).parent.parent.parent / "contract_analyzer.db",
-        Path(__file__).parent.parent.parent.parent / "contract_analyzer.db",
-        Path.home() / ".contract_analyzer" / "contract_analyzer.db",
-    ]
-    
-    db_path = None
-    for path in db_paths:
-        if path.exists():
-            db_path = path
-            break
-    
-    if not db_path:
-        # Try to get from environment or use default
-        db_path = Path(os.getenv("DATABASE_PATH", "contract_analyzer.db"))
-        if not db_path.is_absolute():
-            db_path = Path(__file__).parent.parent.parent / db_path
-    
-    print(f"Checking database at: {db_path}")
-    
-    if not db_path.exists():
-        print(f"Database not found at {db_path}. It will be created on first run.")
-        return
-    
-    conn = sqlite3.connect(str(db_path))
-    cursor = conn.cursor()
-    
     try:
+        # Check if table exists
+        inspector = inspect(engine)
+        if 'analyses' not in inspector.get_table_names():
+            logger.info("analyses table does not exist yet. It will be created by SQLAlchemy.")
+            return
+        
+        # Get existing columns
+        columns = [col['name'] for col in inspector.get_columns('analyses')]
+        
         # Check if session_id column exists
-        cursor.execute("PRAGMA table_info(analyses)")
-        columns = [col[1] for col in cursor.fetchall()]
-        
         if 'session_id' not in columns:
-            print("Adding session_id column to analyses table...")
-            cursor.execute("""
-                ALTER TABLE analyses 
-                ADD COLUMN session_id VARCHAR(255)
-            """)
+            logger.info("Adding session_id column to analyses table...")
             
-            # Create index for better performance
-            try:
-                cursor.execute("""
-                    CREATE INDEX IF NOT EXISTS idx_analyses_session_id 
-                    ON analyses(session_id)
-                """)
-                print("Created index on session_id")
-            except Exception as e:
-                print(f"Index might already exist: {e}")
-            
-            conn.commit()
-            print("[SUCCESS] Migration successful! session_id column added.")
+            # Use raw SQL to add column (works for both SQLite and PostgreSQL)
+            with engine.begin() as conn:
+                # Check database type
+                db_url = settings.database_url.lower()
+                
+                if 'postgresql' in db_url or 'postgres' in db_url:
+                    # PostgreSQL syntax
+                    conn.execute(text("""
+                        ALTER TABLE analyses 
+                        ADD COLUMN IF NOT EXISTS session_id VARCHAR(255)
+                    """))
+                    
+                    # Create index
+                    conn.execute(text("""
+                        CREATE INDEX IF NOT EXISTS idx_analyses_session_id 
+                        ON analyses(session_id)
+                    """))
+                else:
+                    # SQLite syntax
+                    conn.execute(text("""
+                        ALTER TABLE analyses 
+                        ADD COLUMN session_id VARCHAR(255)
+                    """))
+                    
+                    # Create index
+                    try:
+                        conn.execute(text("""
+                            CREATE INDEX IF NOT EXISTS idx_analyses_session_id 
+                            ON analyses(session_id)
+                        """))
+                    except Exception as e:
+                        logger.debug(f"Index might already exist: {e}")
+                
+                logger.info("[SUCCESS] Migration successful! session_id column added.")
         else:
-            print("[OK] session_id column already exists. No migration needed.")
-        
-        # Verify
-        cursor.execute("PRAGMA table_info(analyses)")
-        columns = cursor.fetchall()
-        print("\nCurrent table structure:")
-        for col in columns:
-            print(f"  {col[1]} ({col[2]})")
+            logger.info("[OK] session_id column already exists. No migration needed.")
             
     except Exception as e:
-        print(f"[ERROR] Migration error: {e}")
-        conn.rollback()
-    finally:
-        conn.close()
+        logger.warning(f"Migration check failed (this is OK if column already exists): {e}")
+        # Don't raise - let the app continue
 
 if __name__ == "__main__":
     migrate_database()
