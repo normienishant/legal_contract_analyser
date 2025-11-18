@@ -97,7 +97,7 @@ export default function AdvancedSearch({ onSearch, placeholder = "Search..." }: 
           </div>
           {query && (
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              Searching for: <span className="font-semibold text-blue-600 dark:text-blue-400">"{query}"</span>
+              Searching for: <span className="font-semibold text-blue-600 dark:text-blue-400">&quot;{query}&quot;</span>
             </div>
           )}
         </div>
