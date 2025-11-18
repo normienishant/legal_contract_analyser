@@ -17,7 +17,7 @@ export default function Home() {
                 AI-Powered Contract Analysis
               </span>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-slideDown px-2">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-slideDown px-2 break-words">
               Contract Risk Analyzer
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed animate-fadeIn delay-200 px-4">
@@ -74,8 +74,8 @@ export default function Home() {
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 md:p-12 text-white text-center shadow-2xl transform hover:scale-105 transition-transform animate-fadeIn delay-400 mx-2 sm:mx-0">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
               <div className="transform hover:scale-110 transition-transform">
-                <div className="text-4xl font-bold mb-2 animate-countUp">100%</div>
-                <div className="text-blue-100">AI Accuracy</div>
+                <div className="text-4xl font-bold mb-2 animate-countUp">95%+</div>
+                <div className="text-blue-100">Test Accuracy</div>
               </div>
               <div className="transform hover:scale-110 transition-transform">
                 <div className="text-4xl font-bold mb-2">&lt;30s</div>

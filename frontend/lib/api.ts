@@ -9,6 +9,7 @@ export interface UploadResponse {
 }
 
 export interface ClauseAnalysis {
+  clause_id?: number
   clause_text: string
   clause_index: number
   risk_label: string
@@ -102,6 +103,71 @@ export async function getHistory(): Promise<HistoryItem[]> {
       return []
     }
     throw err
+  }
+}
+
+// Bookmarks API
+export interface Bookmark {
+  id: number
+  clause_id: number
+  analysis_id: number
+  analysis_filename: string
+  clause_text: string
+  clause_index: number
+  risk_label: string
+  risk_score: number
+  note: string | null
+  created_at: string
+}
+
+export interface BookmarkCreate {
+  clause_id: number
+  analysis_id: number
+  note?: string
+}
+
+export async function createBookmark(bookmark: BookmarkCreate): Promise<Bookmark> {
+  const headers = getSessionHeaders()
+  headers['Content-Type'] = 'application/json'
+  
+  const response = await fetch(`${API_BASE_URL}/api/bookmarks`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(bookmark),
+  })
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Failed to create bookmark' }))
+    throw new Error(error.detail || 'Failed to create bookmark')
+  }
+
+  return response.json()
+}
+
+export async function getBookmarks(): Promise<Bookmark[]> {
+  const headers = getSessionHeaders()
+  const response = await fetch(`${API_BASE_URL}/api/bookmarks`, {
+    headers,
+  })
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Failed to get bookmarks' }))
+    throw new Error(error.detail || 'Failed to get bookmarks')
+  }
+
+  return response.json()
+}
+
+export async function deleteBookmark(bookmarkId: number): Promise<void> {
+  const headers = getSessionHeaders()
+  const response = await fetch(`${API_BASE_URL}/api/bookmarks/${bookmarkId}`, {
+    method: 'DELETE',
+    headers,
+  })
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Failed to delete bookmark' }))
+    throw new Error(error.detail || 'Failed to delete bookmark')
   }
 }
 

@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from 'react'
 import ClauseItem from './ClauseItem'
 
 interface Clause {
+  clause_id?: number
   clause_text: string
   clause_index: number
   risk_label: string
@@ -15,9 +16,10 @@ interface Clause {
 interface ClauseListProps {
   clauses: Clause[]
   riskFilter?: 'ALL' | 'HIGH' | 'MEDIUM' | 'LOW'
+  analysisId?: number
 }
 
-export default function ClauseList({ clauses, riskFilter = 'ALL' }: ClauseListProps) {
+export default function ClauseList({ clauses, riskFilter = 'ALL', analysisId }: ClauseListProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const clausesPerPage = 5
@@ -58,6 +60,7 @@ export default function ClauseList({ clauses, riskFilter = 'ALL' }: ClauseListPr
                 clause={clause}
                 isSelected={selectedIndex === originalIndex}
                 onSelect={() => setSelectedIndex(selectedIndex === originalIndex ? null : originalIndex)}
+                analysisId={analysisId}
               />
             )
           })

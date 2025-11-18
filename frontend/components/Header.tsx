@@ -48,6 +48,12 @@ export default function Header() {
                 History
               </Link>
               <Link 
+                href="/bookmarks" 
+                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+              >
+                Bookmarks
+              </Link>
+              <Link 
                 href="/settings" 
                 className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
               >
@@ -100,6 +106,13 @@ export default function Header() {
               className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium transition-colors"
             >
               History
+            </Link>
+            <Link 
+              href="/bookmarks" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium transition-colors"
+            >
+              Bookmarks
             </Link>
             <Link 
               href="/settings" 

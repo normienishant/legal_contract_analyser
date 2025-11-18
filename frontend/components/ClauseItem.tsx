@@ -1,9 +1,12 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import RiskBadge from './RiskBadge'
 import ClauseRewriter from './ClauseRewriter'
+import { createBookmark, deleteBookmark, getBookmarks, type Bookmark } from '@/lib/api'
 
 interface Clause {
+  clause_id?: number
   clause_text: string
   clause_index: number
   risk_label: string
@@ -16,9 +19,55 @@ interface ClauseItemProps {
   clause: Clause
   isSelected: boolean
   onSelect: () => void
+  analysisId?: number
 }
 
-export default function ClauseItem({ clause, isSelected, onSelect }: ClauseItemProps) {
+export default function ClauseItem({ clause, isSelected, onSelect, analysisId }: ClauseItemProps) {
+  const [isBookmarked, setIsBookmarked] = useState(false)
+  const [bookmarkId, setBookmarkId] = useState<number | null>(null)
+  const [bookmarking, setBookmarking] = useState(false)
+
+  useEffect(() => {
+    // Check if clause is bookmarked
+    if (clause.clause_id && analysisId) {
+      getBookmarks().then(bookmarks => {
+        const bookmark = bookmarks.find(b => b.clause_id === clause.clause_id)
+        if (bookmark) {
+          setIsBookmarked(true)
+          setBookmarkId(bookmark.id)
+        }
+      }).catch(() => {
+        // Ignore errors
+      })
+    }
+  }, [clause.clause_id, analysisId])
+
+  const handleBookmark = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!clause.clause_id || !analysisId) return
+
+    setBookmarking(true)
+    try {
+      if (isBookmarked && bookmarkId) {
+        await deleteBookmark(bookmarkId)
+        setIsBookmarked(false)
+        setBookmarkId(null)
+      } else {
+        const bookmark = await createBookmark({
+          clause_id: clause.clause_id,
+          analysis_id: analysisId,
+        })
+        setIsBookmarked(true)
+        setBookmarkId(bookmark.id)
+      }
+    } catch (err: any) {
+      console.error('Bookmark error:', err)
+      alert(err.message || 'Failed to update bookmark')
+    } finally {
+      setBookmarking(false)
+    }
+  }
+
   const getRiskColor = (label: string) => {
     switch (label) {
       case 'HIGH':
@@ -51,7 +100,23 @@ export default function ClauseItem({ clause, isSelected, onSelect }: ClauseItemP
           </div>
           <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Clause {clause.clause_index + 1}</span>
         </div>
-        <RiskBadge score={clause.risk_score} label={clause.risk_label} />
+        <div className="flex items-center gap-2">
+          {clause.clause_id && analysisId && (
+            <button
+              onClick={handleBookmark}
+              disabled={bookmarking}
+              className={`p-2 rounded-lg transition-all ${
+                isBookmarked
+                  ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+              }`}
+              title={isBookmarked ? 'Remove bookmark' : 'Bookmark this clause'}
+            >
+              {bookmarking ? '⏳' : isBookmarked ? '⭐' : '☆'}
+            </button>
+          )}
+          <RiskBadge score={clause.risk_score} label={clause.risk_label} />
+        </div>
       </div>
       <p className="text-gray-900 dark:text-gray-100 mb-3 leading-relaxed text-base font-normal">{clause.clause_text}</p>
       {isSelected && (

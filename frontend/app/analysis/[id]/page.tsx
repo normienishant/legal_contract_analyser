@@ -19,6 +19,7 @@ interface AnalysisData {
     medium_risk_count: number
     low_risk_count: number
     clauses: Array<{
+      clause_id?: number
       clause_text: string
       clause_index: number
       risk_label: string
@@ -238,7 +239,7 @@ export default function AnalysisPage() {
             </div>
           </div>
           <div className="lg:col-span-2">
-            <ClauseList clauses={analysis.analysis.clauses} riskFilter={riskFilter} />
+            <ClauseList clauses={analysis.analysis.clauses} riskFilter={riskFilter} analysisId={analysis.analysis_id} />
           </div>
         </div>
       </main>

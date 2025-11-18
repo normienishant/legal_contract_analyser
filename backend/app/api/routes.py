@@ -354,6 +354,7 @@ async def get_analysis(
     
     clause_analyses = [
         {
+            "clause_id": c.id,
             "clause_text": c.clause_text,
             "clause_index": c.clause_index,
             "risk_label": c.risk_label,

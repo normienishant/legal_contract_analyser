@@ -92,6 +92,44 @@ export default function DashboardPage() {
     )
   }
 
+  // Show empty state if no analyses
+  if (stats.totalAnalyses === 0) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <Header />
+        <main className="flex-grow container mx-auto px-4 py-12">
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+              Dashboard
+            </h1>
+            <p className="text-gray-700 dark:text-gray-300">Overview of your contract analyses</p>
+          </div>
+
+          <div className="max-w-2xl mx-auto text-center py-16">
+            <div className="mb-6">
+              <div className="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-4xl">📊</span>
+              </div>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+              No Analyses Yet
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-8">
+              Upload your first contract to see analytics and insights here.
+            </p>
+            <Link
+              href="/upload"
+              className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 hover:scale-105"
+            >
+              📤 Upload Your First Document
+            </Link>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <Header />
