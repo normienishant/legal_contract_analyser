@@ -55,6 +55,11 @@ class Settings(BaseSettings):
 settings = Settings()
 
 # Ensure directories exist
-os.makedirs(settings.uploads_dir, exist_ok=True)
-os.makedirs(settings.models_dir, exist_ok=True)
+try:
+    os.makedirs(settings.uploads_dir, exist_ok=True)
+    os.makedirs(settings.models_dir, exist_ok=True)
+except Exception as e:
+    # Log but don't fail if directory creation fails
+    import logging
+    logging.getLogger(__name__).warning(f"Could not create directories: {e}")
 
