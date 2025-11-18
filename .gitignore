@@ -68,8 +68,8 @@ uploads/
 *.doc
 !ml_data/sample_contract.pdf
 
-# ML Models
-models/
+# ML Models (but not app/models directory)
+backend/models/
 *.pkl
 *.h5
 *.pt
