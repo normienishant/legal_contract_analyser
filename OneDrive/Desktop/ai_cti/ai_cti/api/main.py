@@ -304,7 +304,16 @@ def results():
                     image_url = row.get("image_url") or ""
                     # Debug: log first few articles' image URLs
                     if len(feeds) < 3:
-                        print(f"[api] Article '{row.get('title', '')[:50]}' image_url: {image_url[:100] if image_url else 'MISSING'}")
+                        print(f"[api/results] Article '{row.get('title', '')[:50]}'")
+                        print(f"[api/results]   image_url from DB: {image_url[:150] if image_url else 'MISSING/NULL'}")
+                        if image_url:
+                            # Test if URL is accessible
+                            try:
+                                import requests
+                                test_resp = requests.head(image_url, timeout=5, allow_redirects=True)
+                                print(f"[api/results]   URL accessibility: {test_resp.status_code}")
+                            except Exception as test_err:
+                                print(f"[api/results]   URL test error: {test_err}")
                     
                     # Create article object
                     article = {

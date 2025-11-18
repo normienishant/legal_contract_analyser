@@ -160,12 +160,21 @@ export default function ArticleCard({ item }) {
             backgroundColor: 'var(--bg-card)'
           }}
           onError={(event) => {
-            console.log('[ArticleCard] Image failed to load:', image);
+            console.error('[ArticleCard] ❌ Image failed to load:', image);
+            console.error('[ArticleCard] Error details:', {
+              src: event.currentTarget.src,
+              naturalWidth: event.currentTarget.naturalWidth,
+              naturalHeight: event.currentTarget.naturalHeight,
+            });
+            // Try to get more info about the error
+            if (image && image.includes('supabase')) {
+              console.error('[ArticleCard] Supabase URL failed - check if bucket is public!');
+            }
             event.currentTarget.src = FALLBACK_IMAGE;
           }}
           onLoad={() => {
             if (image && image !== FALLBACK_IMAGE) {
-              console.log('[ArticleCard] Image loaded successfully:', image.substring(0, 80));
+              console.log('[ArticleCard] ✅ Image loaded successfully:', image.substring(0, 80));
             }
           }}
         />

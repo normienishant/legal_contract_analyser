@@ -244,27 +244,73 @@ def _get_public_url(client, key: str) -> Optional[str]:
     try:
         # Clean key - remove any leading slashes or subdirectories
         clean_key = key.lstrip("/").split("/")[-1]  # Get just filename
+        print(f"[image] _get_public_url called with key='{key}', clean_key='{clean_key}'")
         
-        # Method 1: Try the get_public_url method
+        supabase_url = os.getenv("SUPABASE_URL", "").rstrip("/")
+        print(f"[image] SUPABASE_URL: {supabase_url[:50] if supabase_url else 'NOT SET'}")
+        print(f"[image] SUPABASE_IMAGE_BUCKET: {SUPABASE_IMAGE_BUCKET}")
+        
+        # Method 1: Construct URL manually (most reliable)
+        # Format: https://{project_ref}.supabase.co/storage/v1/object/public/{bucket}/{key}
+        if supabase_url and SUPABASE_IMAGE_BUCKET:
+            try:
+                from urllib.parse import quote
+                # URL encode the key in case it has special characters
+                encoded_key = quote(clean_key, safe='')
+                public_url = f"{supabase_url}/storage/v1/object/public/{SUPABASE_IMAGE_BUCKET}/{encoded_key}"
+                print(f"[image] Constructed manual URL: {public_url}")
+                
+                # Verify it works
+                try:
+                    test_resp = requests.head(public_url, timeout=8, allow_redirects=True)
+                    print(f"[image] Manual URL HEAD request returned: {test_resp.status_code}")
+                    if test_resp.status_code == 200:
+                        print(f"[image] ✓✓✓ Manual URL verified and working!")
+                        return public_url
+                    elif test_resp.status_code == 404:
+                        print(f"[image] ✗ Manual URL returned 404 - file might not exist or bucket not public")
+                        # Try with GET to see if it's a different issue
+                        try:
+                            get_resp = requests.get(public_url, timeout=8, allow_redirects=True)
+                            print(f"[image] GET request returned: {get_resp.status_code}")
+                            if get_resp.status_code == 200:
+                                print(f"[image] ✓ GET works, returning URL anyway")
+                                return public_url
+                        except:
+                            pass
+                    else:
+                        print(f"[image] Manual URL returned {test_resp.status_code}")
+                except Exception as verify_err:
+                    print(f"[image] Could not verify manual URL: {verify_err}")
+                    # Return anyway - might work on frontend
+                    print(f"[image] Returning URL anyway despite verification error")
+                    return public_url
+            except Exception as const_exc:
+                print(f"[image] URL construction failed: {const_exc}")
+                import traceback
+                traceback.print_exc()
+        
+        # Method 2: Try the get_public_url method (fallback)
         try:
             result = client.get_public_url(clean_key)
+            print(f"[image] get_public_url API returned: {type(result)}")
             if isinstance(result, dict):
                 url = result.get("publicUrl") or result.get("publicURL") or result.get("public_url")
                 if url and url.startswith("http"):
-                    print(f"[image] Got public URL from API: {url[:80]}")
+                    print(f"[image] Got public URL from API (dict): {url[:80]}")
                     # Verify URL works
                     try:
-                        test_resp = requests.head(url, timeout=5, allow_redirects=True)
+                        test_resp = requests.head(url, timeout=8, allow_redirects=True)
                         if test_resp.status_code == 200:
                             return url
                         else:
-                            print(f"[image] API URL returned {test_resp.status_code}, trying manual construction")
+                            print(f"[image] API URL returned {test_resp.status_code}")
                     except:
-                        print(f"[image] Could not verify API URL, trying manual construction")
+                        print(f"[image] Could not verify API URL")
             if isinstance(result, str) and result.startswith("http"):
                 print(f"[image] Got public URL from API (string): {result[:80]}")
                 try:
-                    test_resp = requests.head(result, timeout=5, allow_redirects=True)
+                    test_resp = requests.head(result, timeout=8, allow_redirects=True)
                     if test_resp.status_code == 200:
                         return result
                 except:
@@ -272,31 +318,7 @@ def _get_public_url(client, key: str) -> Optional[str]:
         except Exception as api_exc:
             print(f"[image] get_public_url API method failed: {api_exc}")
         
-        # Method 2: Construct URL manually (fallback)
-        # Format: https://{project_ref}.supabase.co/storage/v1/object/public/{bucket}/{key}
-        supabase_url = os.getenv("SUPABASE_URL", "").rstrip("/")
-        if supabase_url and SUPABASE_IMAGE_BUCKET:
-            try:
-                from urllib.parse import quote
-                # URL encode the key in case it has special characters
-                encoded_key = quote(clean_key, safe='')
-                public_url = f"{supabase_url}/storage/v1/object/public/{SUPABASE_IMAGE_BUCKET}/{encoded_key}"
-                print(f"[image] Constructed public URL: {public_url[:80]}")
-                # Verify it works
-                try:
-                    test_resp = requests.head(public_url, timeout=5, allow_redirects=True)
-                    if test_resp.status_code == 200:
-                        return public_url
-                    else:
-                        print(f"[image] Manual URL returned {test_resp.status_code}")
-                except Exception as verify_err:
-                    print(f"[image] Could not verify manual URL: {verify_err}")
-                # Return anyway - might work on frontend
-                return public_url
-            except Exception as const_exc:
-                print(f"[image] URL construction failed: {const_exc}")
-        
-        print(f"[image] ✗ Could not generate public URL for {key}")
+        print(f"[image] ✗✗✗ Could not generate working public URL for {key}")
         return None
     except Exception as exc:
         print(f"[image] get_public_url failed for {key}: {exc}")
@@ -374,13 +396,22 @@ def _upload_image_to_supabase(image_url: str) -> Optional[str]:
         metadata = {"content-type": content_type, "cache-control": "public, max-age=31536000"}
         # Try to upload, but if file exists, that's okay - we'll use existing
         try:
+            print(f"[image] Attempting upload to bucket '{SUPABASE_IMAGE_BUCKET}' with key '{key_with_ext}'...")
             image_storage.upload(key_with_ext, buffer, metadata, file_options={"upsert": "true"})
-            print(f"[image] ✓ Uploaded new thumbnail: {key_with_ext} ({len(content)} bytes)")
+            print(f"[image] ✓✓✓ Uploaded new thumbnail: {key_with_ext} ({len(content)} bytes)")
         except Exception as upload_exc:
             # File might already exist - that's fine, we'll use the existing one
             error_str = str(upload_exc).lower()
             if any(term in error_str for term in ["already exists", "duplicate", "409", "conflict"]):
                 print(f"[image] Thumbnail already exists: {key_with_ext}, using existing")
+            elif "bucket" in error_str or "not found" in error_str:
+                print(f"[image] ✗✗✗ CRITICAL: Bucket error - {upload_exc}")
+                print(f"[image] ✗✗✗ Make sure bucket '{SUPABASE_IMAGE_BUCKET}' exists and is PUBLIC in Supabase dashboard!")
+                raise upload_exc
+            elif "permission" in error_str or "unauthorized" in error_str or "403" in error_str:
+                print(f"[image] ✗✗✗ CRITICAL: Permission error - {upload_exc}")
+                print(f"[image] ✗✗✗ Check Supabase storage policies and make bucket PUBLIC!")
+                raise upload_exc
             else:
                 print(f"[image] Upload error (non-duplicate): {upload_exc}")
                 # Try once more with upsert
@@ -390,11 +421,14 @@ def _upload_image_to_supabase(image_url: str) -> Optional[str]:
                     print(f"[image] ✓ Uploaded with upsert: {key_with_ext}")
                 except Exception as retry_exc:
                     print(f"[image] ✗ Upload retry also failed: {retry_exc}")
+                    import traceback
+                    traceback.print_exc()
                     raise upload_exc
     except Exception as exc:
-        print(f"[supabase:image] upload failed for {image_url}: {exc}")
+        print(f"[supabase:image] ✗✗✗ UPLOAD FAILED for {image_url}: {exc}")
         import traceback
         traceback.print_exc()
+        return None  # Return None on upload failure
 
     # Always try to get public URL (works for both new uploads and existing files)
     # Wait a moment for Supabase to process the upload
@@ -488,6 +522,20 @@ def fetch_feeds_and_upload(limit_per_feed: int = 12) -> None:
     
     print("=" * 60)
     print("[ingest] ============================================")
+    
+    # Verify bucket exists and is accessible
+    try:
+        print(f"[ingest] Verifying storage bucket '{SUPABASE_IMAGE_BUCKET}'...")
+        buckets = supabase.storage.list_buckets()
+        bucket_names = [b.name for b in buckets]
+        if SUPABASE_IMAGE_BUCKET not in bucket_names:
+            print(f"[ingest] ⚠️  WARNING: Bucket '{SUPABASE_IMAGE_BUCKET}' not found!")
+            print(f"[ingest] Available buckets: {bucket_names}")
+            print(f"[ingest] Please create bucket '{SUPABASE_IMAGE_BUCKET}' in Supabase dashboard and make it PUBLIC")
+        else:
+            print(f"[ingest] ✓ Bucket '{SUPABASE_IMAGE_BUCKET}' exists")
+    except Exception as bucket_check_err:
+        print(f"[ingest] Could not verify bucket: {bucket_check_err}")
     print("[ingest] STARTING LIVE FEED INGESTION")
     print("[ingest] ============================================")
     print(f"[ingest] Timestamp: {datetime.now(timezone.utc).isoformat()}")
@@ -553,8 +601,40 @@ def fetch_feeds_and_upload(limit_per_feed: int = 12) -> None:
                         print(f"[article] ✓ Uploaded screenshot: {uploaded_url[:100]}")
             
             if uploaded_url:
-                print(f"[article] ✓ Using Supabase thumbnail: {uploaded_url[:100]}")
-                article["image_url"] = uploaded_url
+                # CRITICAL: Verify the URL works before saving
+                try:
+                    test_resp = requests.head(uploaded_url, timeout=10, allow_redirects=True)
+                    if test_resp.status_code == 200:
+                        print(f"[article] ✓✓✓ VERIFIED thumbnail URL works: {uploaded_url[:100]}")
+                        article["image_url"] = uploaded_url
+                    else:
+                        print(f"[article] ✗✗✗ Thumbnail URL returned {test_resp.status_code}: {uploaded_url[:100]}")
+                        # Try to fix the URL
+                        if "supabase.co" in uploaded_url:
+                            # Extract just the filename from the URL
+                            from urllib.parse import urlparse, unquote
+                            parsed = urlparse(uploaded_url)
+                            path_parts = parsed.path.split("/")
+                            filename = path_parts[-1] if path_parts else None
+                            if filename:
+                                # Reconstruct with correct bucket
+                                fixed_url = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_IMAGE_BUCKET}/{filename}"
+                                print(f"[article] Trying fixed URL: {fixed_url[:100]}")
+                                fixed_resp = requests.head(fixed_url, timeout=10, allow_redirects=True)
+                                if fixed_resp.status_code == 200:
+                                    print(f"[article] ✓✓✓ Fixed URL works: {fixed_url[:100]}")
+                                    article["image_url"] = fixed_url
+                                else:
+                                    print(f"[article] ✗ Fixed URL also failed: {fixed_resp.status_code}")
+                                    article["image_url"] = None
+                            else:
+                                article["image_url"] = None
+                        else:
+                            article["image_url"] = None
+                except Exception as verify_final:
+                    print(f"[article] ✗ Could not verify final URL: {verify_final}")
+                    # Save anyway - might work on frontend
+                    article["image_url"] = uploaded_url
             else:
                 print(f"[article] ✗ Failed to upload thumbnail for: {title[:50]}...")
                 article["image_url"] = None
@@ -578,14 +658,29 @@ def fetch_feeds_and_upload(limit_per_feed: int = 12) -> None:
 
     # Upsert articles into Supabase table (unique per link)
     try:
+        # Log image URLs before upsert
+        articles_with_images = sum(1 for a in collected if a.get("image_url"))
+        print(f"[articles] About to upsert {len(collected)} articles, {articles_with_images} have image_url")
+        for i, art in enumerate(collected[:3]):  # Log first 3
+            img = art.get("image_url")
+            print(f"[articles] Article {i+1}: '{art.get('title', '')[:40]}' -> image_url: {img[:100] if img else 'NONE'}")
+        
         response = supabase.table("articles").upsert(
             collected,
             on_conflict="link",
         ).execute()
         inserted = len(response.data) if getattr(response, "data", None) else len(collected)
-        print(f"[articles] upserted {inserted} records")
+        print(f"[articles] ✓ upserted {inserted} records")
+        
+        # Verify what was actually saved
+        if response.data:
+            for i, saved in enumerate(response.data[:3]):
+                saved_img = saved.get("image_url")
+                print(f"[articles] Saved article {i+1}: image_url = {saved_img[:100] if saved_img else 'NONE'}")
     except Exception as exc:
-        print(f"[articles] upsert failed: {exc}")
+        print(f"[articles] ✗ upsert failed: {exc}")
+        import traceback
+        traceback.print_exc()
 
     # Extract IOCs for this batch
     all_text = [
