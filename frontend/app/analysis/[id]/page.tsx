@@ -98,7 +98,14 @@ export default function AnalysisPage() {
               </h1>
               <p className="text-gray-700 dark:text-gray-300">Analyzed on {new Date(analysis.created_at).toLocaleString()}</p>
             </div>
-            <ExportReport analysis={analysis.analysis} analysisId={analysis.analysis_id} />
+            <ExportReport 
+              analysis={{
+                ...analysis.analysis,
+                filename: analysis.filename,
+                created_at: analysis.created_at
+              }} 
+              analysisId={analysis.analysis_id} 
+            />
           </div>
         </div>
 
