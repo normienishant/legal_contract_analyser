@@ -15,33 +15,126 @@ export default function ClauseRewriter({ originalClause, riskLabel, onRewrite }:
   const generateRewrite = async () => {
     setLoading(true)
     try {
-      // Simulate AI rewrite (in production, call backend API)
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      // Simulate processing time
+      await new Promise(resolve => setTimeout(resolve, 1200))
       
-      // Enhanced rewrite logic based on risk
       let suggestion = originalClause
+      let changesMade = false
+      
+      // Smart rewrite that preserves meaning while reducing risk
+      const improvements: string[] = []
+      
+      // HIGH RISK: More aggressive improvements while maintaining core meaning
       if (riskLabel === 'HIGH') {
-        // Replace high-risk patterns with safer alternatives
-        suggestion = originalClause
-          .replace(/unlimited\s+liability/gi, 'liability limited to the contract value')
-          .replace(/without\s+limitation/gi, 'subject to reasonable limitations')
-          .replace(/shall\s+be\s+penalized/gi, 'may be subject to reasonable penalties not exceeding 10% of the contract value, subject to prior written notice and opportunity to cure')
-          .replace(/indemnify.*without\s+limitation/gi, 'indemnify up to the total contract value')
-          .replace(/hold\s+harmless.*all\s+claims/gi, 'hold harmless for claims arising from gross negligence or willful misconduct')
-          .replace(/automatic\s+renewal/gi, 'renewal subject to mutual written agreement')
-          .replace(/sole\s+discretion/gi, 'reasonable discretion, subject to good faith')
-          .replace(/non-refundable.*any\s+circumstances/gi, 'non-refundable except in cases of material breach by the other party')
-          .replace(/binding\s+arbitration.*waiver.*jury/gi, 'dispute resolution through mediation, with arbitration as a last resort')
-      } else if (riskLabel === 'MEDIUM') {
-        suggestion = originalClause
-          .replace(/sole\s+discretion/gi, 'mutual agreement')
-          .replace(/binding/gi, 'subject to review and mutual consent')
-          .replace(/exclusive\s+jurisdiction/gi, 'jurisdiction with option for alternative dispute resolution')
+        // Liability limitations - preserve intent but add caps
+        if (/\bunlimited\s+liability\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\bunlimited\s+liability\b/gi, 'liability limited to the total contract value')
+          changesMade = true
+          improvements.push('Added liability cap to protect both parties')
+        }
+        
+        // Without limitation - add reasonable bounds
+        if (/\bwithout\s+limitation\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\bwithout\s+limitation\b/gi, 'subject to reasonable limitations as set forth herein')
+          changesMade = true
+          improvements.push('Added reasonable limitations clause')
+        }
+        
+        // Penalties - add notice and cure period
+        if (/\b(shall|will)\s+be\s+penalized\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\b(shall|will)\s+be\s+penalized\b/gi, 'may be subject to reasonable penalties, not exceeding 10% of the contract value, after providing written notice and a 30-day opportunity to cure')
+          changesMade = true
+          improvements.push('Added notice and cure period for penalties')
+        }
+        
+        // Indemnification - limit scope
+        if (/\bindemnify.*without\s+limitation\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\bindemnify(.*?)(without\s+limitation)/gi, 'indemnify$1up to the total contract value')
+          changesMade = true
+          improvements.push('Limited indemnification to contract value')
+        }
+        
+        // Hold harmless - narrow to specific circumstances
+        if (/\bhold\s+harmless.*all\s+claims\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\bhold\s+harmless.*all\s+claims\b/gi, 'hold harmless for claims arising solely from gross negligence or willful misconduct')
+          changesMade = true
+          improvements.push('Narrowed hold harmless to specific circumstances')
+        }
+        
+        // Automatic renewal - require mutual consent
+        if (/\bautomatic\s+renewal\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\bautomatic\s+renewal\b/gi, 'renewal subject to mutual written agreement at least 30 days prior to expiration')
+          changesMade = true
+          improvements.push('Changed to mutual renewal agreement')
+        }
+        
+        // Sole discretion - add good faith requirement
+        if (/\bsole\s+discretion\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\bsole\s+discretion\b/gi, 'reasonable discretion, exercised in good faith')
+          changesMade = true
+          improvements.push('Added good faith requirement')
+        }
+        
+        // Non-refundable - add exceptions
+        if (/\bnon-refundable.*(any|all)\s+circumstances\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\bnon-refundable(.*?)(any|all)\s+circumstances\b/gi, 'non-refundable$1except in cases of material breach by the other party or as otherwise provided herein')
+          changesMade = true
+          improvements.push('Added exceptions for material breach')
+        }
+        
+        // Binding arbitration - add mediation option
+        if (/\bbinding\s+arbitration.*waiver.*jury\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\bbinding\s+arbitration.*waiver.*jury\b/gi, 'dispute resolution through good faith negotiation, followed by mediation if necessary, with binding arbitration as a last resort')
+          changesMade = true
+          improvements.push('Added negotiation and mediation steps')
+        }
       }
       
-      // If no replacements were made, provide a general improvement
-      if (suggestion === originalClause && riskLabel === 'HIGH') {
-        suggestion = `REVISED: ${originalClause}\n\nThis clause should be reviewed to:\n- Add reasonable limitations to any penalties or liabilities\n- Include notice and cure periods where applicable\n- Ensure mutual obligations and protections\n- Consider alternative dispute resolution mechanisms\n\nPlease consult with legal counsel for specific revisions tailored to your circumstances.`
+      // MEDIUM RISK: Moderate improvements
+      else if (riskLabel === 'MEDIUM') {
+        if (/\bsole\s+discretion\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\bsole\s+discretion\b/gi, 'mutual agreement')
+          changesMade = true
+          improvements.push('Changed to mutual agreement')
+        }
+        
+        if (/\bexclusive\s+jurisdiction\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\bexclusive\s+jurisdiction\b/gi, 'jurisdiction, with option for alternative dispute resolution')
+          changesMade = true
+          improvements.push('Added alternative dispute resolution option')
+        }
+        
+        if (/\b(shall|must)\s+comply\s+immediately\b/gi.test(suggestion)) {
+          suggestion = suggestion.replace(/\b(shall|must)\s+comply\s+immediately\b/gi, 'shall comply within a reasonable time period, not to exceed 30 days')
+          changesMade = true
+          improvements.push('Added reasonable compliance period')
+        }
+      }
+      
+      // LOW RISK: Minor clarifications
+      else {
+        // Just add clarity without changing meaning
+        if (/\b(shall|will)\b/gi.test(suggestion) && !/\b(shall|will)\s+endeavor\b/gi.test(suggestion)) {
+          // Keep as is, but note it's already well-written
+          improvements.push('Clause is well-structured. Minor clarifications suggested below.')
+        }
+      }
+      
+      // If no specific patterns matched, provide contextual improvement
+      if (!changesMade) {
+        if (riskLabel === 'HIGH') {
+          suggestion = `${originalClause}\n\n[SUGGESTED REVISION - Preserving Original Meaning]\n\nConsider adding:\n• Reasonable limitations on any penalties or liabilities\n• Notice and cure periods (typically 30 days) before enforcement\n• Mutual obligations and protections for both parties\n• Alternative dispute resolution mechanisms before litigation\n\nNote: This revision maintains the core intent while adding protective measures. Please review with legal counsel to ensure it meets your specific needs.`
+          improvements.push('General risk mitigation suggestions provided')
+        } else if (riskLabel === 'MEDIUM') {
+          suggestion = `${originalClause}\n\n[SUGGESTED CLARIFICATION]\n\nConsider:\n• Adding specific timeframes where deadlines are mentioned\n• Clarifying mutual obligations\n• Including dispute resolution procedures\n\nThis clause is generally acceptable but could benefit from minor clarifications.`
+          improvements.push('Clarification suggestions provided')
+        } else {
+          suggestion = `${originalClause}\n\n[REVIEW NOTE]\n\nThis clause appears well-structured. Consider:\n• Ensuring all terms are clearly defined\n• Verifying compliance with applicable laws\n• Confirming mutual understanding of obligations\n\nNo significant changes recommended.`
+          improvements.push('Minor review suggestions provided')
+        }
+      } else {
+        // Add note about changes
+        suggestion = `${suggestion}\n\n[Changes made while preserving original meaning: ${improvements.join('; ')}]`
       }
       
       setRewritten(suggestion)

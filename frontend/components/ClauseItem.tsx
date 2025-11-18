@@ -105,7 +105,7 @@ export default function ClauseItem({ clause, isSelected, onSelect, analysisId }:
             <button
               onClick={handleBookmark}
               disabled={bookmarking}
-              className={`p-2 rounded-lg transition-all ${
+              className={`p-1.5 rounded-lg transition-all ${
                 isBookmarked
                   ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400'
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
@@ -133,12 +133,10 @@ export default function ClauseItem({ clause, isSelected, onSelect, analysisId }:
             </h4>
             <p className="text-sm text-blue-900 dark:text-blue-100 leading-relaxed font-medium">{clause.suggested_mitigation}</p>
           </div>
-          {clause.risk_label === 'HIGH' && (
-            <ClauseRewriter 
-              originalClause={clause.clause_text} 
-              riskLabel={clause.risk_label}
-            />
-          )}
+          <ClauseRewriter 
+            originalClause={clause.clause_text} 
+            riskLabel={clause.risk_label}
+          />
         </div>
       )}
     </div>
