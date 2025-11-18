@@ -120,21 +120,26 @@ export default function ClauseRewriter({ originalClause, riskLabel, onRewrite }:
         }
       }
       
-      // If no specific patterns matched, provide contextual improvement
+      // Always provide output - if no specific patterns matched, provide contextual improvement
       if (!changesMade) {
         if (riskLabel === 'HIGH') {
-          suggestion = `${originalClause}\n\n[SUGGESTED REVISION - Preserving Original Meaning]\n\nConsider adding:\n• Reasonable limitations on any penalties or liabilities\n• Notice and cure periods (typically 30 days) before enforcement\n• Mutual obligations and protections for both parties\n• Alternative dispute resolution mechanisms before litigation\n\nNote: This revision maintains the core intent while adding protective measures. Please review with legal counsel to ensure it meets your specific needs.`
+          suggestion = `${originalClause}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n[SUGGESTED REVISION - Preserving Original Meaning]\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nConsider adding:\n• Reasonable limitations on any penalties or liabilities\n• Notice and cure periods (typically 30 days) before enforcement\n• Mutual obligations and protections for both parties\n• Alternative dispute resolution mechanisms before litigation\n\nNote: This revision maintains the core intent while adding protective measures. Please review with legal counsel to ensure it meets your specific needs.`
           improvements.push('General risk mitigation suggestions provided')
         } else if (riskLabel === 'MEDIUM') {
-          suggestion = `${originalClause}\n\n[SUGGESTED CLARIFICATION]\n\nConsider:\n• Adding specific timeframes where deadlines are mentioned\n• Clarifying mutual obligations\n• Including dispute resolution procedures\n\nThis clause is generally acceptable but could benefit from minor clarifications.`
+          suggestion = `${originalClause}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n[SUGGESTED CLARIFICATION]\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nConsider:\n• Adding specific timeframes where deadlines are mentioned\n• Clarifying mutual obligations\n• Including dispute resolution procedures\n\nThis clause is generally acceptable but could benefit from minor clarifications.`
           improvements.push('Clarification suggestions provided')
         } else {
-          suggestion = `${originalClause}\n\n[REVIEW NOTE]\n\nThis clause appears well-structured. Consider:\n• Ensuring all terms are clearly defined\n• Verifying compliance with applicable laws\n• Confirming mutual understanding of obligations\n\nNo significant changes recommended.`
+          suggestion = `${originalClause}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n[REVIEW NOTE]\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nThis clause appears well-structured. Consider:\n• Ensuring all terms are clearly defined\n• Verifying compliance with applicable laws\n• Confirming mutual understanding of obligations\n\nNo significant changes recommended.`
           improvements.push('Minor review suggestions provided')
         }
       } else {
         // Add note about changes
-        suggestion = `${suggestion}\n\n[Changes made while preserving original meaning: ${improvements.join('; ')}]`
+        suggestion = `${suggestion}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n[Changes made while preserving original meaning: ${improvements.join('; ')}]`
+      }
+      
+      // Ensure we always have output
+      if (!suggestion || suggestion.trim() === '') {
+        suggestion = `${originalClause}\n\n[Rewrite generated. Review the suggestions above.]`
       }
       
       setRewritten(suggestion)

@@ -67,7 +67,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-black dark:via-gray-950 dark:to-black">
         <Header />
         <main className="flex-grow container mx-auto px-4 py-12">
           <div className="text-center">
@@ -82,7 +82,7 @@ export default function DashboardPage() {
 
   if (!stats) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-black dark:via-gray-950 dark:to-black">
         <Header />
         <main className="flex-grow container mx-auto px-4 py-12">
           <div className="text-center text-gray-600 dark:text-gray-300">Failed to load dashboard</div>
@@ -95,7 +95,7 @@ export default function DashboardPage() {
   // Show empty state if no analyses
   if (stats.totalAnalyses === 0) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-black dark:via-gray-950 dark:to-black">
         <Header />
         <main className="flex-grow container mx-auto px-4 py-12">
           <div className="mb-8">

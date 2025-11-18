@@ -26,6 +26,7 @@ export default function ClauseItem({ clause, isSelected, onSelect, analysisId }:
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [bookmarkId, setBookmarkId] = useState<number | null>(null)
   const [bookmarking, setBookmarking] = useState(false)
+  const [bookmarkMessage, setBookmarkMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
   useEffect(() => {
     // Check if clause is bookmarked
@@ -47,11 +48,13 @@ export default function ClauseItem({ clause, isSelected, onSelect, analysisId }:
     if (!clause.clause_id || !analysisId) return
 
     setBookmarking(true)
+    setBookmarkMessage(null)
     try {
       if (isBookmarked && bookmarkId) {
         await deleteBookmark(bookmarkId)
         setIsBookmarked(false)
         setBookmarkId(null)
+        setBookmarkMessage({ type: 'success', text: 'Bookmark removed' })
       } else {
         const bookmark = await createBookmark({
           clause_id: clause.clause_id,
@@ -59,10 +62,14 @@ export default function ClauseItem({ clause, isSelected, onSelect, analysisId }:
         })
         setIsBookmarked(true)
         setBookmarkId(bookmark.id)
+        setBookmarkMessage({ type: 'success', text: 'Clause bookmarked!' })
       }
+      // Auto-hide message after 2 seconds
+      setTimeout(() => setBookmarkMessage(null), 2000)
     } catch (err: any) {
       console.error('Bookmark error:', err)
-      alert(err.message || 'Failed to update bookmark')
+      setBookmarkMessage({ type: 'error', text: err.message || 'Failed to update bookmark' })
+      setTimeout(() => setBookmarkMessage(null), 3000)
     } finally {
       setBookmarking(false)
     }
@@ -100,20 +107,31 @@ export default function ClauseItem({ clause, isSelected, onSelect, analysisId }:
           </div>
           <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Clause {clause.clause_index + 1}</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 relative">
           {clause.clause_id && analysisId && (
-            <button
-              onClick={handleBookmark}
-              disabled={bookmarking}
-              className={`p-1.5 rounded-lg transition-all ${
-                isBookmarked
-                  ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
-              }`}
-              title={isBookmarked ? 'Remove bookmark' : 'Bookmark this clause'}
-            >
-              {bookmarking ? '⏳' : isBookmarked ? '⭐' : '☆'}
-            </button>
+            <>
+              <button
+                onClick={handleBookmark}
+                disabled={bookmarking}
+                className={`p-1.5 rounded-lg transition-all ${
+                  isBookmarked
+                    ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                }`}
+                title={isBookmarked ? 'Remove bookmark' : 'Bookmark this clause'}
+              >
+                {bookmarking ? '⏳' : isBookmarked ? '⭐' : '☆'}
+              </button>
+              {bookmarkMessage && (
+                <div className={`absolute top-full right-0 mt-2 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap z-50 shadow-lg animate-fadeIn ${
+                  bookmarkMessage.type === 'success'
+                    ? 'bg-green-500 text-white'
+                    : 'bg-red-500 text-white'
+                }`}>
+                  {bookmarkMessage.text}
+                </div>
+              )}
+            </>
           )}
           <RiskBadge score={clause.risk_score} label={clause.risk_label} />
         </div>
