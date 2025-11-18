@@ -63,7 +63,7 @@ git push origin main
 3. **Configure Service:**
    - **Name:** `contract-analyzer-backend`
    - **Region:** Same as database
-   - **Branch:** `main`
+   - **Branch:** `master` (or `main` if you renamed it)
    - **Root Directory:** `backend` ⚠️ **CRITICAL!**
    - **Runtime:** `Python 3`
    - **Build Command:** `pip install -r requirements.txt`

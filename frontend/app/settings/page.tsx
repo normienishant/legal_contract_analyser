@@ -5,6 +5,8 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import DarkModeToggle from '@/components/DarkModeToggle'
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+
 export default function SettingsPage() {
   const [mlMode, setMlMode] = useState<'ml' | 'rules'>('ml')
   const [loading, setLoading] = useState(true)
@@ -18,7 +20,7 @@ export default function SettingsPage() {
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), 5000) // 5 second timeout
         
-        const response = await fetch('http://localhost:8000/health', {
+        const response = await fetch(`${API_BASE_URL}/health`, {
           signal: controller.signal
         })
         clearTimeout(timeoutId)
@@ -51,7 +53,7 @@ export default function SettingsPage() {
     setSaving(true)
     setMessage(null)
     try {
-      const response = await fetch('http://localhost:8000/api/settings', {
+      const response = await fetch(`${API_BASE_URL}/api/settings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +101,7 @@ export default function SettingsPage() {
                   <div>
                     <p className="font-semibold text-yellow-900 dark:text-yellow-100">Backend Not Connected</p>
                     <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                      Make sure the backend server is running on http://localhost:8000
+                      Make sure the backend server is running on {API_BASE_URL}
                     </p>
                   </div>
                 </div>

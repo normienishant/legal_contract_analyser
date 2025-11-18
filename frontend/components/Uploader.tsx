@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { uploadFile } from '@/lib/api'
 import { getSessionHeaders } from '@/lib/session'
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+
 interface UploaderProps {
   onUploadSuccess: (fileId: string) => void
   uploading: boolean
@@ -81,7 +83,7 @@ export default function Uploader({ onUploadSuccess, uploading, setUploading }: U
       // Trigger analysis pipeline
       // First extract, then analyze
       const sessionHeaders = getSessionHeaders()
-      const extractResponse = await fetch(`http://localhost:8000/api/extract?file_id=${result.file_id}`, {
+      const extractResponse = await fetch(`${API_BASE_URL}/api/extract?file_id=${result.file_id}`, {
         method: 'POST',
         headers: sessionHeaders,
       })
@@ -90,7 +92,7 @@ export default function Uploader({ onUploadSuccess, uploading, setUploading }: U
         throw new Error(errorData.detail || 'Failed to extract text')
       }
       
-      const analysisResponse = await fetch(`http://localhost:8000/api/analyze?file_id=${result.file_id}`, {
+      const analysisResponse = await fetch(`${API_BASE_URL}/api/analyze?file_id=${result.file_id}`, {
         method: 'POST',
         headers: sessionHeaders,
       })
