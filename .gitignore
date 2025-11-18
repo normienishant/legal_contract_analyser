@@ -13,7 +13,9 @@ dist/
 downloads/
 eggs/
 .eggs/
+# Ignore lib directories except frontend/lib
 lib/
+!frontend/lib/
 lib64/
 parts/
 sdist/
