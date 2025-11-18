@@ -17,22 +17,22 @@ export default function Home() {
                 AI-Powered Contract Analysis
               </span>
             </div>
-            <h1 className="text-6xl font-extrabold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-slideDown">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-slideDown px-2">
               Contract Risk Analyzer
             </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed animate-fadeIn delay-200">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed animate-fadeIn delay-200 px-4">
               Instantly analyze your contracts with advanced AI. Detect risks, get detailed insights, and receive actionable recommendations to protect your business.
             </p>
-            <div className="flex gap-4 justify-center flex-wrap animate-fadeIn delay-300">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center flex-wrap animate-fadeIn delay-300 px-4">
               <Link
                 href="/upload"
-                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 hover:scale-105 animate-pulse-slow"
+                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 sm:px-10 py-3 sm:py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 hover:scale-105 animate-pulse-slow text-center"
               >
                 🚀 Analyze Document
               </Link>
               <Link
                 href="/history"
-                className="bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-10 py-4 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-lg hover:shadow-xl border-2 border-gray-200 dark:border-gray-700 transform hover:-translate-y-0.5 hover:scale-105"
+                className="w-full sm:w-auto bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-8 sm:px-10 py-3 sm:py-4 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-lg hover:shadow-xl border-2 border-gray-200 dark:border-gray-700 transform hover:-translate-y-0.5 hover:scale-105 text-center"
               >
                 📊 View History
               </Link>
@@ -71,8 +71,8 @@ export default function Home() {
           </div>
 
           {/* Stats Section */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-12 text-white text-center shadow-2xl transform hover:scale-105 transition-transform animate-fadeIn delay-400">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 sm:p-8 md:p-12 text-white text-center shadow-2xl transform hover:scale-105 transition-transform animate-fadeIn delay-400 mx-2 sm:mx-0">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
               <div className="transform hover:scale-110 transition-transform">
                 <div className="text-4xl font-bold mb-2 animate-countUp">100%</div>
                 <div className="text-blue-100">AI Accuracy</div>
@@ -93,9 +93,9 @@ export default function Home() {
           </div>
 
           {/* How It Works */}
-          <div className="mt-16">
-            <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white animate-fadeIn">How It Works</h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="mt-12 sm:mt-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 text-gray-900 dark:text-white animate-fadeIn px-4">How It Works</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 px-2">
               {[
                 { step: '1', title: 'Upload', desc: 'Upload your contract document (PDF, DOCX, or TXT)', delay: 'delay-100' },
                 { step: '2', title: 'Analyze', desc: 'AI extracts text and segments into clauses automatically', delay: 'delay-200' },
