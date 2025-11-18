@@ -12,3 +12,7 @@ numpy
 pandas
 huggingface-hub
 transformers
+supabase
+feedparser
+apscheduler
+reportlab
