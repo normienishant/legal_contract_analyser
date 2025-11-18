@@ -9,14 +9,9 @@
 
 **Contract Analyzer & Risk Detector**
 
-AI-powered contract analysis platform that automatically detects risks, analyzes legal clauses, and provides actionable recommendations.
 
-❓ **What it does**
-• Detects high/medium/low risk clauses with 95%+ ML accuracy
-• Segments contracts (PDF/DOCX/TXT) into individual clauses
-• Provides risk scores, explanations, and mitigation strategies
-• Generates safer clause rewrites while preserving meaning
-• Dashboard with analytics, bookmarks, and export capabilities
+
+
 
 🧩 **Stack**
 Python · FastAPI · DistilBERT · Next.js · TypeScript · Tailwind · PostgreSQL · Vercel · Render

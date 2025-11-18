@@ -1,0 +1,11 @@
+Contract Analyzer & Risk Detector
+
+AI platform that detects contract risks using ML (95%+ accuracy). Auto-segments contracts, provides risk scores, and suggests safer rewrites.
+
+🧩 Stack: Python · FastAPI · DistilBERT · Next.js · TypeScript
+
+💡 Why: To help legal teams identify contract risks instantly and reduce review time by 80%.
+
+🔗 Live: https://legal-contract-risk-analyser.vercel.app
+💻 GitHub: https://github.com/normienishant/legal_contract_analyser
+
