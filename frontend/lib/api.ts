@@ -1,5 +1,7 @@
 import { getSessionHeaders } from './session'
+import { fetchWithFailover } from './api-failover'
 
+// Legacy support - will use failover system
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
 export interface UploadResponse {
@@ -49,18 +51,14 @@ export interface HistoryItem {
 export async function uploadFile(file: FormData): Promise<UploadResponse> {
   const headers = getSessionHeaders()
   
-  // Check if API URL is configured
-  if (!API_BASE_URL || API_BASE_URL === 'http://localhost:8000') {
-    console.warn('API_BASE_URL not configured, using default localhost')
-  }
-  const response = await fetch(`${API_BASE_URL}/api/upload`, {
+  const response = await fetchWithFailover('/api/upload', {
     method: 'POST',
     headers,
     body: file,
   })
 
   if (!response.ok) {
-    const error = await response.json()
+    const error = await response.json().catch(() => ({ detail: 'Upload failed' }))
     throw new Error(error.detail || 'Upload failed')
   }
 
@@ -69,12 +67,12 @@ export async function uploadFile(file: FormData): Promise<UploadResponse> {
 
 export async function getAnalysis(analysisId: string): Promise<AnalysisResponse> {
   const headers = getSessionHeaders()
-  const response = await fetch(`${API_BASE_URL}/api/history/${analysisId}`, {
+  const response = await fetchWithFailover(`/api/history/${analysisId}`, {
     headers,
   })
 
   if (!response.ok) {
-    const error = await response.json()
+    const error = await response.json().catch(() => ({ detail: 'Failed to get analysis' }))
     throw new Error(error.detail || 'Failed to get analysis')
   }
 
@@ -84,9 +82,8 @@ export async function getAnalysis(analysisId: string): Promise<AnalysisResponse>
 export async function getHistory(): Promise<HistoryItem[]> {
   try {
     const headers = getSessionHeaders()
-    const response = await fetch(`${API_BASE_URL}/api/history`, {
+    const response = await fetchWithFailover('/api/history', {
       headers,
-      signal: AbortSignal.timeout(10000) // 10 second timeout
     })
 
     if (!response.ok) {
@@ -102,12 +99,9 @@ export async function getHistory(): Promise<HistoryItem[]> {
     const data = await response.json()
     return Array.isArray(data) ? data : []
   } catch (err: any) {
-    // Network errors or timeouts - return empty array
-    if (err.name === 'AbortError' || err.name === 'TypeError') {
-      console.warn('Failed to connect to backend. Make sure backend is running.')
-      return []
-    }
-    throw err
+    // Network errors - return empty array (failover already tried all backends)
+    console.warn('Failed to connect to backend. All backends unavailable.')
+    return []
   }
 }
 
@@ -135,7 +129,7 @@ export async function createBookmark(bookmark: BookmarkCreate): Promise<Bookmark
   const headers = getSessionHeaders()
   headers['Content-Type'] = 'application/json'
   
-  const response = await fetch(`${API_BASE_URL}/api/bookmarks`, {
+  const response = await fetchWithFailover('/api/bookmarks', {
     method: 'POST',
     headers,
     body: JSON.stringify(bookmark),
@@ -151,7 +145,7 @@ export async function createBookmark(bookmark: BookmarkCreate): Promise<Bookmark
 
 export async function getBookmarks(): Promise<Bookmark[]> {
   const headers = getSessionHeaders()
-  const response = await fetch(`${API_BASE_URL}/api/bookmarks`, {
+  const response = await fetchWithFailover('/api/bookmarks', {
     headers,
   })
 
@@ -165,7 +159,7 @@ export async function getBookmarks(): Promise<Bookmark[]> {
 
 export async function deleteBookmark(bookmarkId: number): Promise<void> {
   const headers = getSessionHeaders()
-  const response = await fetch(`${API_BASE_URL}/api/bookmarks/${bookmarkId}`, {
+  const response = await fetchWithFailover(`/api/bookmarks/${bookmarkId}`, {
     method: 'DELETE',
     headers,
   })

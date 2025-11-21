@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import DarkModeToggle from '@/components/DarkModeToggle'
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+import { fetchWithFailover, getCurrentBackend } from '@/lib/api-failover'
 
 export default function SettingsPage() {
   const [mlMode, setMlMode] = useState<'ml' | 'rules'>('ml')
@@ -17,13 +16,9 @@ export default function SettingsPage() {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 5000) // 5 second timeout
-        
-        const response = await fetch(`${API_BASE_URL}/health`, {
-          signal: controller.signal
+        const response = await fetchWithFailover('/health', {
+          method: 'GET',
         })
-        clearTimeout(timeoutId)
         
         if (response.ok) {
           const data = await response.json()
@@ -53,7 +48,7 @@ export default function SettingsPage() {
     setSaving(true)
     setMessage(null)
     try {
-      const response = await fetch(`${API_BASE_URL}/api/settings`, {
+      const response = await fetchWithFailover('/api/settings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,19 +89,36 @@ export default function SettingsPage() {
         ) : (
           <div className="space-y-6">
             {/* Backend Connection Status */}
-            {!backendConnected && (
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">⚠️</span>
-                  <div>
-                    <p className="font-semibold text-yellow-900 dark:text-yellow-100">Backend Not Connected</p>
-                    <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                      Make sure the backend server is running on {API_BASE_URL}
+            <div className={`rounded-xl p-4 border ${
+              backendConnected 
+                ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' 
+                : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800'
+            }`}>
+              <div className="flex items-center gap-2">
+                <span className="text-xl">{backendConnected ? '✅' : '⚠️'}</span>
+                <div>
+                  <p className={`font-semibold ${
+                    backendConnected 
+                      ? 'text-green-900 dark:text-green-100' 
+                      : 'text-yellow-900 dark:text-yellow-100'
+                  }`}>
+                    {backendConnected ? 'Backend Connected' : 'Backend Not Connected'}
+                  </p>
+                  <p className={`text-sm ${
+                    backendConnected 
+                      ? 'text-green-800 dark:text-green-200' 
+                      : 'text-yellow-800 dark:text-yellow-200'
+                  }`}>
+                    Current Backend: {getCurrentBackend()}
+                  </p>
+                  {backendConnected && (
+                    <p className="text-xs text-green-700 dark:text-green-300 mt-1">
+                      Automatic failover enabled (Railway → Render)
                     </p>
-                  </div>
+                  )}
                 </div>
               </div>
-            )}
+            </div>
 
             <div className="bg-white dark:bg-[#141414] rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-[#262626] space-y-8">
             {/* ML Mode Setting */}
