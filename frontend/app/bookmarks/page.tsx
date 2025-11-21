@@ -42,12 +42,12 @@ export default function BookmarksPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-black dark:via-gray-950 dark:to-black">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-[#0a0a0a] dark:text-[#e5e5e5]">
         <Header />
         <main className="flex-grow container mx-auto px-4 py-12">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-300 text-lg">Loading bookmarks...</p>
+            <p className="text-gray-600 dark:text-[#e5e5e5] text-lg">Loading bookmarks...</p>
           </div>
         </main>
         <Footer />
@@ -56,7 +56,7 @@ export default function BookmarksPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-[#0a0a0a]">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">
@@ -64,7 +64,7 @@ export default function BookmarksPage() {
             <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
               📑 Bookmarks
             </h1>
-            <p className="text-gray-700 dark:text-gray-300">Your saved important clauses</p>
+            <p className="text-gray-700 dark:text-[#e5e5e5]">Your saved important clauses</p>
           </div>
 
           {error && (
@@ -74,10 +74,10 @@ export default function BookmarksPage() {
           )}
 
           {bookmarks.length === 0 ? (
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-12 text-center border border-gray-100 dark:border-gray-700">
+            <div className="bg-white dark:bg-[#141414] rounded-2xl shadow-xl p-12 text-center border border-gray-100 dark:border-[#262626]">
               <div className="text-6xl mb-4">📑</div>
-              <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">No Bookmarks Yet</h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-[#e5e5e5]">No Bookmarks Yet</h2>
+              <p className="text-gray-600 dark:text-[#e5e5e5] mb-6">
                 Start bookmarking important clauses from your analyses
               </p>
               <Link
@@ -92,7 +92,7 @@ export default function BookmarksPage() {
               {bookmarks.map((bookmark) => (
                 <div
                   key={bookmark.id}
-                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all"
+                  className="bg-white dark:bg-[#141414] rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-[#262626] hover:shadow-xl transition-all"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
@@ -103,12 +103,12 @@ export default function BookmarksPage() {
                         >
                           {bookmark.analysis_filename}
                         </Link>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                        <span className="text-sm text-gray-500 dark:text-[#a3a3a3]">
                           Clause {bookmark.clause_index + 1}
                         </span>
                         <RiskBadge score={bookmark.risk_score} label={bookmark.risk_label} />
                       </div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                      <p className="text-sm text-gray-500 dark:text-[#a3a3a3] mb-2">
                         Bookmarked on {new Date(bookmark.created_at).toLocaleString()}
                       </p>
                     </div>
@@ -120,7 +120,7 @@ export default function BookmarksPage() {
                       🗑️
                     </button>
                   </div>
-                  <p className="text-gray-900 dark:text-gray-100 leading-relaxed mb-3">
+                  <p className="text-gray-900 dark:text-[#e5e5e5] leading-relaxed mb-3">
                     {bookmark.clause_text}
                   </p>
                   {bookmark.note && (

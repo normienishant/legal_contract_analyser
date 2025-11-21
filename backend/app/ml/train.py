@@ -83,7 +83,7 @@ class RiskClassificationTrainer:
             
             # Normalize quotes
             text = re.sub(r'["""]', '"', text)
-            text = re.sub(r'[''']', "'", text)
+            text = re.sub(r"[''']", "'", text)
             
             # Remove control characters but keep newlines/spaces
             text = re.sub(r'[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f-\x9f]', '', text)

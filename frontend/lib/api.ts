@@ -48,6 +48,11 @@ export interface HistoryItem {
 
 export async function uploadFile(file: FormData): Promise<UploadResponse> {
   const headers = getSessionHeaders()
+  
+  // Check if API URL is configured
+  if (!API_BASE_URL || API_BASE_URL === 'http://localhost:8000') {
+    console.warn('API_BASE_URL not configured, using default localhost')
+  }
   const response = await fetch(`${API_BASE_URL}/api/upload`, {
     method: 'POST',
     headers,

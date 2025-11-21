@@ -169,8 +169,8 @@ export default function ClauseRewriter({ originalClause, riskLabel, onRewrite }:
         </button>
       </div>
       {rewritten && (
-        <div className="mt-3 p-4 bg-white dark:bg-gray-800 rounded-lg border-2 border-blue-300 dark:border-blue-600 shadow-md">
-          <p className="text-sm text-black dark:text-gray-100 whitespace-pre-wrap leading-relaxed font-medium">{rewritten}</p>
+        <div className="mt-3 p-4 bg-white dark:bg-[#141414] rounded-lg border-2 border-blue-300 dark:border-blue-600 shadow-md">
+          <p className="text-sm text-black dark:text-[#e5e5e5] whitespace-pre-wrap leading-relaxed font-medium">{rewritten}</p>
           <div className="mt-3 flex gap-2">
             <button
               onClick={async () => {
@@ -187,7 +187,7 @@ export default function ClauseRewriter({ originalClause, riskLabel, onRewrite }:
             </button>
             <button
               onClick={() => setRewritten('')}
-              className="px-3 py-1.5 text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-semibold"
+              className="px-3 py-1.5 text-xs bg-gray-200 dark:bg-[#262626] text-gray-700 dark:text-[#e5e5e5] rounded-lg hover:bg-gray-300 dark:hover:bg-[#404040] transition-colors font-semibold"
             >
               Clear
             </button>

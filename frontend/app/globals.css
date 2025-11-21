@@ -3,27 +3,39 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --bg-page: #f8f9fa;
+  --bg-card: #ffffff;
+  --text-default: #1a1a1a;
+  --text-muted: #6b7280;
+  --text-subtle: #4b5563;
+  --accent: #1a1a1a;
+  --accent-soft: rgba(26, 26, 26, 0.08);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --border-soft: #e5e7eb;
+  --border-strong: #d1d5db;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.dark {
+  color-scheme: dark;
+  --bg-page: #0a0a0a;
+  --bg-card: #141414;
+  --text-default: #e5e5e5;
+  --text-muted: #a3a3a3;
+  --text-subtle: #d4d4d4;
+  --accent: #e5e5e5;
+  --accent-soft: rgba(229, 229, 229, 0.12);
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --border-soft: #262626;
+  --border-strong: #404040;
 }
 
+html,
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg-page);
+  color: var(--text-default);
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 /* Animations */

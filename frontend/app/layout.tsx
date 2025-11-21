@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts'
+import Toaster from '@/components/Toaster'
 
 export const metadata: Metadata = {
   title: 'AI Contract Analyzer & Risk Detector',
@@ -18,10 +19,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className="dark:bg-gray-900 dark:text-white transition-colors">
+    <html lang="en" suppressHydrationWarning>
+      <body className="transition-colors">
         {children}
         <KeyboardShortcuts />
+        <Toaster />
       </body>
     </html>
   )

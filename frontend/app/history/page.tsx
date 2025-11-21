@@ -109,7 +109,7 @@ export default function HistoryPage() {
   }, [searchQuery, searchIn, riskFilter, sortBy, sortOrder, history, dateRange])
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-black dark:via-gray-950 dark:to-black">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-[#0a0a0a]">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12">
         <div className="mb-8">
@@ -180,11 +180,11 @@ export default function HistoryPage() {
             </div>
             {/* Sort Options */}
             <div className="flex items-center gap-4 flex-wrap">
-              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Sort by:</span>
+              <span className="text-sm font-semibold text-gray-700 dark:text-[#e5e5e5]">Sort by:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'date' | 'risk' | 'name')}
-                className="px-4 py-2 border-2 border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-lg focus:border-blue-500 focus:outline-none"
+                className="px-4 py-2 border-2 border-gray-300 dark:border-[#262626] dark:bg-[#141414] dark:text-[#e5e5e5] rounded-lg focus:border-blue-500 focus:outline-none"
               >
                 <option value="date">Date</option>
                 <option value="risk">Risk Score</option>
@@ -192,7 +192,7 @@ export default function HistoryPage() {
               </select>
               <button
                 onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                className="px-4 py-2 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:border-blue-400 transition-colors"
+                className="px-4 py-2 bg-white dark:bg-[#141414] border-2 border-gray-300 dark:border-[#262626] text-gray-700 dark:text-[#e5e5e5] rounded-lg hover:border-blue-400 transition-colors"
               >
                 {sortOrder === 'asc' ? '↑ Ascending' : '↓ Descending'}
               </button>
@@ -202,24 +202,24 @@ export default function HistoryPage() {
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-300">Loading history...</p>
+            <p className="text-gray-600 dark:text-[#e5e5e5]">Loading history...</p>
           </div>
         ) : filteredHistory.length === 0 ? (
-          <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+          <div className="text-center py-12 bg-white dark:bg-[#141414] rounded-2xl shadow-lg">
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-4xl">{history.length === 0 ? '📋' : '🔍'}</span>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-[#e5e5e5] mb-2">
               {history.length === 0 ? 'No Analysis History Yet' : 'No Results Found'}
             </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-2">
+            <p className="text-gray-600 dark:text-[#e5e5e5] mb-2">
               {history.length === 0 
                 ? 'You haven\'t analyzed any contracts yet. Upload your first contract to get started!'
                 : 'Try adjusting your search or filter criteria'}
             </p>
             {history.length === 0 && (
               <>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                <p className="text-sm text-gray-500 dark:text-[#a3a3a3] mb-6">
                   📄 Upload a PDF, DOCX, or TXT file to analyze it for risks
                 </p>
                 <Link
@@ -233,7 +233,7 @@ export default function HistoryPage() {
           </div>
         ) : (
           <>
-            <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+            <div className="mb-4 text-sm text-gray-600 dark:text-[#a3a3a3]">
               Showing {filteredHistory.length} of {history.length} analyses
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -241,21 +241,21 @@ export default function HistoryPage() {
               <Link
                 key={item.id}
                 href={`/analysis/${item.id}`}
-                className="block bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-gray-100 dark:border-gray-700"
+                className="block bg-white dark:bg-[#141414] rounded-2xl shadow-lg p-6 hover:shadow-2xl transition-all transform hover:-translate-y-1 border border-gray-100 dark:border-[#262626]"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">{item.original_filename}</h3>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-[#e5e5e5] mb-2 line-clamp-1">{item.original_filename}</h3>
+                    <p className="text-gray-500 dark:text-[#a3a3a3] text-sm mb-4">
                       {new Date(item.created_at).toLocaleString()}
                     </p>
                   </div>
                   <RiskBadge score={item.global_risk_score} />
                 </div>
                 <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
-                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Clauses</div>
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">{item.total_clauses}</div>
+                  <div className="bg-gray-50 dark:bg-[#262626] rounded-lg p-3">
+                    <div className="text-sm text-gray-600 dark:text-[#a3a3a3] mb-1">Total Clauses</div>
+                    <div className="text-2xl font-bold text-gray-900 dark:text-[#e5e5e5]">{item.total_clauses}</div>
                   </div>
                   <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-3">
                     <div className="text-sm text-red-600 dark:text-red-400 mb-1">High Risk</div>

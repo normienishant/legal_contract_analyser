@@ -149,7 +149,7 @@ export default function ExportReport({ analysis, analysisId }: ExportReportProps
     <div className="relative">
       <button
         onClick={() => setShowMenu(!showMenu)}
-        className="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
+        className="bg-white dark:bg-[#141414] border-2 border-gray-300 dark:border-[#404040] text-gray-700 dark:text-[#e5e5e5] px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-[#1a1a1a] transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
       >
         📥 Export Report
         <span className="text-xs">▼</span>
@@ -160,22 +160,22 @@ export default function ExportReport({ analysis, analysisId }: ExportReportProps
             className="fixed inset-0 z-10" 
             onClick={() => setShowMenu(false)}
           ></div>
-          <div className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-xl p-2 min-w-[200px] z-20">
+          <div className="absolute top-full left-0 mt-2 bg-white dark:bg-[#141414] border-2 border-gray-200 dark:border-[#262626] rounded-xl shadow-xl p-2 min-w-[200px] z-20">
             <button
               onClick={() => { exportToPDF(); setShowMenu(false); }}
-              className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2 text-gray-900 dark:text-gray-100"
+              className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] rounded-lg transition-colors flex items-center gap-2 text-gray-900 dark:text-[#e5e5e5]"
             >
               <span>📄</span> Export as PDF
             </button>
             <button
               onClick={() => { exportToJSON(); setShowMenu(false); }}
-              className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2 text-gray-900 dark:text-gray-100"
+              className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] rounded-lg transition-colors flex items-center gap-2 text-gray-900 dark:text-[#e5e5e5]"
             >
               <span>📋</span> Export as JSON
             </button>
             <button
               onClick={() => { exportToText(); setShowMenu(false); }}
-              className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2 text-gray-900 dark:text-gray-100"
+              className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] rounded-lg transition-colors flex items-center gap-2 text-gray-900 dark:text-[#e5e5e5]"
             >
               <span>📝</span> Export as TXT
             </button>

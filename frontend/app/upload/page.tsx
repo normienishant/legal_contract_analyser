@@ -15,7 +15,7 @@ export default function UploadPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-black dark:via-gray-950 dark:to-black">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-[#0a0a0a]">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12">
         <div className="max-w-3xl mx-auto">
@@ -23,7 +23,7 @@ export default function UploadPage() {
             <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Upload Document
             </h1>
-            <p className="text-gray-600 dark:text-gray-300">Get instant AI-powered risk analysis</p>
+            <p className="text-gray-600 dark:text-[#e5e5e5]">Get instant AI-powered risk analysis</p>
           </div>
           <Uploader onUploadSuccess={handleUploadSuccess} uploading={uploading} setUploading={setUploading} />
         </div>

@@ -105,32 +105,38 @@ export default function Uploader({ onUploadSuccess, uploading, setUploading }: U
       onUploadSuccess(analysisData.analysis_id.toString())
     } catch (err: any) {
       console.error('Upload error:', err)
-      setError(err.message || 'Upload failed')
+      if (err.name === 'AbortError' || err.message?.includes('fetch')) {
+        setError('Failed to connect to server. Please check if the backend is running and NEXT_PUBLIC_API_URL is set correctly.')
+      } else if (err.message) {
+        setError(err.message)
+      } else {
+        setError('Upload failed. Please try again.')
+      }
     } finally {
       setUploading(false)
     }
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+    <div className="bg-white dark:bg-[#141414] rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-[#262626]">
       <div className="text-center mb-6">
         <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
           <span className="text-4xl">📄</span>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Upload Your Contract</h2>
-        <p className="text-gray-600 dark:text-gray-300">Supported formats: PDF, DOCX, TXT (Max 10MB)</p>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-[#e5e5e5] mb-2">Upload Your Contract</h2>
+        <p className="text-gray-600 dark:text-[#e5e5e5]">Supported formats: PDF, DOCX, TXT (Max 10MB)</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+          <label className="block text-sm font-semibold text-gray-700 dark:text-[#e5e5e5] mb-3">
             Select Document
           </label>
           <div 
-            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all bg-gray-50 dark:bg-gray-900 ${
+            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all bg-gray-50 dark:bg-[#0a0a0a] ${
               isDragging 
                 ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20 scale-105' 
-                : 'border-gray-300 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500'
+                : 'border-gray-300 dark:border-[#262626] hover:border-blue-400 dark:hover:border-blue-500'
             }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -153,8 +159,8 @@ export default function Uploader({ onUploadSuccess, uploading, setUploading }: U
               </div>
               {file ? (
                 <div>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-white">{file.name}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  <p className="text-lg font-semibold text-gray-900 dark:text-[#e5e5e5]">{file.name}</p>
+                  <p className="text-sm text-gray-500 dark:text-[#a3a3a3] mt-1">
                     {(file.size / 1024 / 1024).toFixed(2)} MB
                   </p>
                   <button
@@ -171,10 +177,10 @@ export default function Uploader({ onUploadSuccess, uploading, setUploading }: U
                 </div>
               ) : (
                 <div>
-                  <p className="text-gray-700 dark:text-gray-300 font-medium mb-1">
+                  <p className="text-gray-700 dark:text-[#e5e5e5] font-medium mb-1">
                     {isDragging ? 'Drop file here' : 'Click to browse or drag and drop'}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">PDF, DOCX, or TXT files (Max 10MB)</p>
+                  <p className="text-sm text-gray-500 dark:text-[#a3a3a3]">PDF, DOCX, or TXT files (Max 10MB)</p>
                 </div>
               )}
             </label>

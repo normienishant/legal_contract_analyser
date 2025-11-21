@@ -66,7 +66,7 @@ export default function DateRangeFilter({ onDateRangeChange }: DateRangeFilterPr
           className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
             selectedRange === 'all'
               ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-              : 'bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-400'
+              : 'bg-white dark:bg-[#141414] border-2 border-gray-300 dark:border-[#262626] text-gray-700 dark:text-[#e5e5e5] hover:border-blue-400'
           }`}
         >
           All Time
@@ -76,7 +76,7 @@ export default function DateRangeFilter({ onDateRangeChange }: DateRangeFilterPr
           className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
             selectedRange === 'today'
               ? 'bg-blue-600 text-white shadow-lg'
-              : 'bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-400'
+              : 'bg-white dark:bg-[#141414] border-2 border-gray-300 dark:border-[#262626] text-gray-700 dark:text-[#e5e5e5] hover:border-blue-400'
           }`}
         >
           Today
@@ -86,7 +86,7 @@ export default function DateRangeFilter({ onDateRangeChange }: DateRangeFilterPr
           className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
             selectedRange === 'week'
               ? 'bg-blue-600 text-white shadow-lg'
-              : 'bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-400'
+              : 'bg-white dark:bg-[#141414] border-2 border-gray-300 dark:border-[#262626] text-gray-700 dark:text-[#e5e5e5] hover:border-blue-400'
           }`}
         >
           Last 7 Days
@@ -96,7 +96,7 @@ export default function DateRangeFilter({ onDateRangeChange }: DateRangeFilterPr
           className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
             selectedRange === 'month'
               ? 'bg-blue-600 text-white shadow-lg'
-              : 'bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-400'
+              : 'bg-white dark:bg-[#141414] border-2 border-gray-300 dark:border-[#262626] text-gray-700 dark:text-[#e5e5e5] hover:border-blue-400'
           }`}
         >
           This Month
@@ -106,7 +106,7 @@ export default function DateRangeFilter({ onDateRangeChange }: DateRangeFilterPr
           className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
             selectedRange === 'year'
               ? 'bg-blue-600 text-white shadow-lg'
-              : 'bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-400'
+              : 'bg-white dark:bg-[#141414] border-2 border-gray-300 dark:border-[#262626] text-gray-700 dark:text-[#e5e5e5] hover:border-blue-400'
           }`}
         >
           This Year
@@ -114,7 +114,7 @@ export default function DateRangeFilter({ onDateRangeChange }: DateRangeFilterPr
       </div>
       
       <div className="flex items-center gap-2 flex-wrap">
-        <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Custom Range:</span>
+        <span className="text-sm font-semibold text-gray-700 dark:text-[#e5e5e5]">Custom Range:</span>
         <input
           type="date"
           value={customStart}
@@ -125,9 +125,9 @@ export default function DateRangeFilter({ onDateRangeChange }: DateRangeFilterPr
               handleCustomDateChange()
             }
           }}
-          className="px-3 py-2 border-2 border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-lg focus:border-blue-500 focus:outline-none text-sm"
+          className="px-3 py-2 border-2 border-gray-300 dark:border-[#262626] dark:bg-[#141414] dark:text-[#e5e5e5] rounded-lg focus:border-blue-500 focus:outline-none text-sm"
         />
-        <span className="text-gray-500 dark:text-gray-400">to</span>
+        <span className="text-gray-500 dark:text-[#a3a3a3]">to</span>
         <input
           type="date"
           value={customEnd}
@@ -138,7 +138,7 @@ export default function DateRangeFilter({ onDateRangeChange }: DateRangeFilterPr
               handleCustomDateChange()
             }
           }}
-          className="px-3 py-2 border-2 border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-lg focus:border-blue-500 focus:outline-none text-sm"
+          className="px-3 py-2 border-2 border-gray-300 dark:border-[#262626] dark:bg-[#141414] dark:text-[#e5e5e5] rounded-lg focus:border-blue-500 focus:outline-none text-sm"
         />
         {(customStart || customEnd) && (
           <button
@@ -148,7 +148,7 @@ export default function DateRangeFilter({ onDateRangeChange }: DateRangeFilterPr
               setSelectedRange('all')
               onDateRangeChange(null, null)
             }}
-            className="px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm"
+            className="px-3 py-2 bg-gray-200 dark:bg-[#262626] text-gray-700 dark:text-[#e5e5e5] rounded-lg hover:bg-gray-300 dark:hover:bg-[#404040] transition-colors text-sm"
           >
             Clear
           </button>

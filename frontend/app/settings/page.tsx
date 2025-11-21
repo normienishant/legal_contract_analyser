@@ -76,20 +76,20 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-black dark:via-gray-950 dark:to-black">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-[#0a0a0a]">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12 max-w-4xl">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Settings
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">Configure your analysis preferences</p>
+          <p className="text-gray-600 dark:text-[#e5e5e5]">Configure your analysis preferences</p>
         </div>
 
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-300">Loading settings...</p>
+            <p className="text-gray-600 dark:text-[#e5e5e5]">Loading settings...</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -108,18 +108,18 @@ export default function SettingsPage() {
               </div>
             )}
 
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700 space-y-8">
+            <div className="bg-white dark:bg-[#141414] rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-[#262626] space-y-8">
             {/* ML Mode Setting */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Analysis Mode</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-[#e5e5e5] mb-2">Analysis Mode</h2>
+              <p className="text-sm text-gray-600 dark:text-[#a3a3a3] mb-4">
                 Choose how contracts should be analyzed for risks
               </p>
               <div className="space-y-4">
                 <div className={`flex items-start gap-4 p-4 border-2 rounded-xl transition-colors ${
                   mlMode === 'ml' 
                     ? 'border-blue-500 dark:border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
-                    : 'border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500'
+                    : 'border-gray-200 dark:border-[#262626] hover:border-blue-400 dark:hover:border-blue-500'
                 }`}>
                   <input
                     type="radio"
@@ -132,17 +132,17 @@ export default function SettingsPage() {
                   />
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <label htmlFor="ml-mode" className="block font-semibold text-gray-900 dark:text-white cursor-pointer">
+                      <label htmlFor="ml-mode" className="block font-semibold text-gray-900 dark:text-[#e5e5e5] cursor-pointer">
                         🤖 ML-Powered Analysis
                       </label>
                       <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-semibold rounded">
                         Recommended
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                    <p className="text-sm text-gray-600 dark:text-[#e5e5e5] mb-2">
                       Uses AI model trained on 5000+ real contract clauses. Provides accurate, context-aware risk classification.
                     </p>
-                    <ul className="text-xs text-gray-500 dark:text-gray-400 space-y-1 list-disc list-inside ml-4">
+                    <ul className="text-xs text-gray-500 dark:text-[#a3a3a3] space-y-1 list-disc list-inside ml-4">
                       <li>Better accuracy on complex clauses</li>
                       <li>Understands context and nuance</li>
                       <li>Trained on real-world legal documents</li>
@@ -153,7 +153,7 @@ export default function SettingsPage() {
                 <div className={`flex items-start gap-4 p-4 border-2 rounded-xl transition-colors ${
                   mlMode === 'rules' 
                     ? 'border-blue-500 dark:border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
-                    : 'border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500'
+                    : 'border-gray-200 dark:border-[#262626] hover:border-blue-400 dark:hover:border-blue-500'
                 }`}>
                   <input
                     type="radio"
@@ -165,13 +165,13 @@ export default function SettingsPage() {
                     className="mt-1"
                   />
                   <div className="flex-1">
-                    <label htmlFor="rules-mode" className="block font-semibold text-gray-900 dark:text-white mb-1 cursor-pointer">
+                    <label htmlFor="rules-mode" className="block font-semibold text-gray-900 dark:text-[#e5e5e5] mb-1 cursor-pointer">
                       ⚙️ Rule-Based Analysis
                     </label>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                    <p className="text-sm text-gray-600 dark:text-[#e5e5e5] mb-2">
                       Uses keyword matching and pattern detection. Faster but less accurate than ML mode.
                     </p>
-                    <ul className="text-xs text-gray-500 dark:text-gray-400 space-y-1 list-disc list-inside ml-4">
+                    <ul className="text-xs text-gray-500 dark:text-[#a3a3a3] space-y-1 list-disc list-inside ml-4">
                       <li>Faster processing</li>
                       <li>No model loading required</li>
                       <li>Good for simple contracts</li>
@@ -182,30 +182,30 @@ export default function SettingsPage() {
             </div>
 
             {/* Additional Settings */}
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">General Settings</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <div className="border-t border-gray-200 dark:border-[#262626] pt-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-[#e5e5e5] mb-2">General Settings</h2>
+              <p className="text-sm text-gray-600 dark:text-[#a3a3a3] mb-4">
                 Configure application preferences
               </p>
               
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-[#262626]/50 rounded-lg">
                   <div>
-                    <p className="font-semibold text-gray-900 dark:text-white">Dark Mode</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Toggle dark/light theme</p>
+                    <p className="font-semibold text-gray-900 dark:text-[#e5e5e5]">Dark Mode</p>
+                    <p className="text-sm text-gray-600 dark:text-[#a3a3a3]">Toggle dark/light theme</p>
                   </div>
                   <DarkModeToggle />
                 </div>
                 
-                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-[#262626]/50 rounded-lg">
                   <div>
-                    <p className="font-semibold text-gray-900 dark:text-white">Export Format</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Default export format for reports</p>
+                    <p className="font-semibold text-gray-900 dark:text-[#e5e5e5]">Export Format</p>
+                    <p className="text-sm text-gray-600 dark:text-[#a3a3a3]">Default export format for reports</p>
                   </div>
-                  <select className="px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white text-gray-900 dark:text-white rounded-lg text-sm focus:outline-none focus:border-blue-500">
-                    <option className="text-gray-900 dark:text-white">PDF</option>
-                    <option className="text-gray-900 dark:text-white">JSON</option>
-                    <option className="text-gray-900 dark:text-white">TXT</option>
+                  <select className="px-3 py-2 border border-gray-300 dark:border-[#404040] dark:bg-[#141414] dark:text-[#e5e5e5] text-gray-900 dark:text-[#e5e5e5] rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                    <option className="text-gray-900 dark:text-[#e5e5e5]">PDF</option>
+                    <option className="text-gray-900 dark:text-[#e5e5e5]">JSON</option>
+                    <option className="text-gray-900 dark:text-[#e5e5e5]">TXT</option>
                   </select>
                 </div>
               </div>
@@ -225,7 +225,7 @@ export default function SettingsPage() {
             </div>
 
             {/* Save Button */}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-[#262626]">
               {message && (
                 <div className={`px-4 py-2 rounded-lg text-sm ${
                   message.type === 'success' 
@@ -241,7 +241,7 @@ export default function SettingsPage() {
                     setMlMode('ml')
                     setMessage({ type: 'success', text: 'Settings reset to defaults' })
                   }}
-                  className="px-6 py-3 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-semibold hover:border-blue-400 transition-all"
+                  className="px-6 py-3 bg-white dark:bg-[#262626] border-2 border-gray-300 dark:border-[#404040] text-gray-700 dark:text-[#e5e5e5] rounded-xl font-semibold hover:border-blue-400 transition-all"
                 >
                   Reset
                 </button>

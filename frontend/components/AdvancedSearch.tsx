@@ -31,7 +31,7 @@ export default function AdvancedSearch({ onSearch, placeholder = "Search..." }: 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setIsExpanded(true)}
-            className="w-full px-4 py-3 pl-10 border-2 border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl focus:border-blue-500 focus:outline-none transition-colors"
+            className="w-full px-4 py-3 pl-10 border-2 border-gray-300 dark:border-[#262626] dark:bg-[#141414] dark:text-[#e5e5e5] rounded-xl focus:border-blue-500 focus:outline-none transition-colors"
           />
           <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
             🔍
@@ -50,16 +50,16 @@ export default function AdvancedSearch({ onSearch, placeholder = "Search..." }: 
         </div>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="px-4 py-3 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:border-blue-400 transition-colors font-semibold"
+          className="px-4 py-3 bg-white dark:bg-[#141414] border-2 border-gray-300 dark:border-[#262626] text-gray-700 dark:text-[#e5e5e5] rounded-xl hover:border-blue-400 transition-colors font-semibold"
         >
           {isExpanded ? '▲' : '▼'} Advanced
         </button>
       </div>
       
       {isExpanded && (
-        <div className="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 rounded-xl p-4 space-y-3 animate-fadeIn">
+        <div className="bg-white dark:bg-[#141414] border-2 border-gray-300 dark:border-[#262626] rounded-xl p-4 space-y-3 animate-fadeIn">
           <div>
-            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+            <label className="text-sm font-semibold text-gray-700 dark:text-[#e5e5e5] mb-2 block">
               Search In:
             </label>
             <div className="flex gap-2 flex-wrap">
@@ -68,7 +68,7 @@ export default function AdvancedSearch({ onSearch, placeholder = "Search..." }: 
                 className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
                   searchIn === 'all'
                     ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    : 'bg-gray-100 dark:bg-[#262626] text-gray-700 dark:text-[#e5e5e5] hover:bg-gray-200 dark:hover:bg-[#404040]'
                 }`}
               >
                 All
@@ -78,7 +78,7 @@ export default function AdvancedSearch({ onSearch, placeholder = "Search..." }: 
                 className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
                   searchIn === 'filename'
                     ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    : 'bg-gray-100 dark:bg-[#262626] text-gray-700 dark:text-[#e5e5e5] hover:bg-gray-200 dark:hover:bg-[#404040]'
                 }`}
               >
                 Filename Only
@@ -88,7 +88,7 @@ export default function AdvancedSearch({ onSearch, placeholder = "Search..." }: 
                 className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
                   searchIn === 'clause'
                     ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    : 'bg-gray-100 dark:bg-[#262626] text-gray-700 dark:text-[#e5e5e5] hover:bg-gray-200 dark:hover:bg-[#404040]'
                 }`}
               >
                 Clause Text
@@ -96,7 +96,7 @@ export default function AdvancedSearch({ onSearch, placeholder = "Search..." }: 
             </div>
           </div>
           {query && (
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-gray-600 dark:text-[#a3a3a3]">
               Searching for: <span className="font-semibold text-blue-600 dark:text-blue-400">&quot;{query}&quot;</span>
             </div>
           )}

@@ -4,21 +4,24 @@ import { useEffect, useState } from 'react'
 
 export default function DarkModeToggle() {
   const [darkMode, setDarkMode] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     // Check localStorage or system preference
     const saved = localStorage.getItem('darkMode')
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const isDark = saved ? saved === 'true' : prefersDark
+    const isDark = saved !== null ? saved === 'true' : prefersDark
     setDarkMode(isDark)
     applyDarkMode(isDark)
   }, [])
 
   const applyDarkMode = (isDark: boolean) => {
+    const root = document.documentElement
     if (isDark) {
-      document.documentElement.classList.add('dark')
+      root.classList.add('dark')
     } else {
-      document.documentElement.classList.remove('dark')
+      root.classList.remove('dark')
     }
   }
 
@@ -29,10 +32,21 @@ export default function DarkModeToggle() {
     applyDarkMode(newMode)
   }
 
+  if (!mounted) {
+    return (
+      <button
+        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#141414] transition-colors"
+        aria-label="Toggle dark mode"
+      >
+        <span className="text-xl">🌙</span>
+      </button>
+    )
+  }
+
   return (
     <button
       onClick={toggleDarkMode}
-      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#141414] transition-colors"
       aria-label="Toggle dark mode"
     >
       {darkMode ? (

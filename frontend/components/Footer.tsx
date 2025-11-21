@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-950 text-white py-6 mt-auto border-t border-gray-700 dark:border-gray-900">
+    <footer className="bg-gradient-to-r from-gray-900 to-gray-800 dark:bg-[#0a0a0a] text-white py-6 mt-auto border-t border-gray-700 dark:border-[#1a1a1a]">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center gap-4">
           <div className="flex items-center gap-6">
@@ -8,7 +8,7 @@ export default function Footer() {
               href="https://www.linkedin.com/in/designsbynishant/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full bg-gray-800 dark:bg-gray-900 hover:bg-blue-600 transition-all duration-300 hover:scale-110"
+              className="p-2 rounded-full bg-gray-800 dark:bg-[#0a0a0a] hover:bg-blue-600 transition-all duration-300 hover:scale-110"
               aria-label="LinkedIn"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -19,7 +19,7 @@ export default function Footer() {
               href="https://github.com/normienishant"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full bg-gray-800 dark:bg-gray-900 hover:bg-blue-600 transition-all duration-300 hover:scale-110"
+              className="p-2 rounded-full bg-gray-800 dark:bg-[#0a0a0a] hover:bg-blue-600 transition-all duration-300 hover:scale-110"
               aria-label="GitHub"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -28,10 +28,10 @@ export default function Footer() {
             </a>
           </div>
           <div className="text-center">
-            <p className="text-gray-300 dark:text-gray-400 text-sm">
+            <p className="text-gray-300 dark:text-[#a3a3a3] text-sm">
               &copy; 2025 AI Contract Analyzer & Risk Detector
             </p>
-            <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">
+            <p className="text-gray-400 dark:text-[#a3a3a3] text-xs mt-1">
               Built by{' '}
               <a
                 href="https://www.linkedin.com/in/designsbynishant/"

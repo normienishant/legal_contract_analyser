@@ -61,12 +61,12 @@ export default function AnalysisPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-black dark:via-gray-950 dark:to-black">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-[#0a0a0a]">
         <Header />
         <main className="flex-grow container mx-auto px-4 py-12">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-300 text-lg">Loading analysis...</p>
+            <p className="text-gray-600 dark:text-[#a3a3a3] text-lg">Loading analysis...</p>
           </div>
         </main>
         <Footer />
@@ -88,7 +88,7 @@ export default function AnalysisPage() {
 
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-[#0a0a0a]">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12">
         <div className="mb-8">
@@ -97,7 +97,7 @@ export default function AnalysisPage() {
               <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
                 {analysis.filename}
               </h1>
-              <p className="text-gray-700 dark:text-gray-300">Analyzed on {new Date(analysis.created_at).toLocaleString()}</p>
+              <p className="text-gray-700 dark:text-[#a3a3a3]">Analyzed on {new Date(analysis.created_at).toLocaleString()}</p>
             </div>
             <ExportReport 
               analysis={{
@@ -113,15 +113,15 @@ export default function AnalysisPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-1 space-y-6">
             {/* Risk Filter Sidebar */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
-              <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Filter by Risk</h2>
+            <div className="bg-white dark:bg-[#141414] rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-[#262626]">
+              <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-[#e5e5e5]">Filter by Risk</h2>
               <div className="space-y-2">
                 <button
                   onClick={() => setRiskFilter('ALL')}
                   className={`w-full text-left px-4 py-3 rounded-lg transition-all font-semibold ${
                     riskFilter === 'ALL'
                       ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      : 'bg-gray-100 dark:bg-[#262626] text-gray-700 dark:text-[#e5e5e5] hover:bg-gray-200 dark:hover:bg-[#404040]'
                   }`}
                 >
                   All Clauses ({analysis.analysis.total_clauses})
@@ -160,14 +160,14 @@ export default function AnalysisPage() {
             </div>
 
             {/* Risk Summary Card */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
-              <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Risk Summary</h2>
+            <div className="bg-white dark:bg-[#141414] rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-[#262626]">
+              <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-[#e5e5e5]">Risk Summary</h2>
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">Global Risk Score</span>
+                  <span className="text-gray-700 dark:text-[#e5e5e5] font-medium">Global Risk Score</span>
                   <RiskBadge score={analysis.analysis.global_risk_score} />
                 </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-2">
+                <div className="w-full bg-gray-200 dark:bg-[#262626] rounded-full h-4 mb-2">
                   <div
                     className={`h-4 rounded-full transition-all ${
                       analysis.analysis.global_risk_score >= 70
@@ -179,15 +179,15 @@ export default function AnalysisPage() {
                     style={{ width: `${analysis.analysis.global_risk_score}%` }}
                   />
                 </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 text-right">{analysis.analysis.global_risk_score.toFixed(1)}/100</p>
+                <p className="text-xs text-gray-600 dark:text-[#a3a3a3] text-right">{analysis.analysis.global_risk_score.toFixed(1)}/100</p>
               </div>
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#262626] rounded-lg">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Total Clauses</span>
+                    <span className="text-gray-700 dark:text-[#e5e5e5] font-medium">Total Clauses</span>
                   </div>
-                  <span className="font-bold text-gray-900 dark:text-white">{analysis.analysis.total_clauses}</span>
+                  <span className="font-bold text-gray-900 dark:text-[#e5e5e5]">{analysis.analysis.total_clauses}</span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
                   <div className="flex items-center gap-2">
@@ -214,8 +214,8 @@ export default function AnalysisPage() {
             </div>
 
             {/* Risk Distribution Chart */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
-              <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Risk Distribution</h3>
+            <div className="bg-white dark:bg-[#141414] rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-[#262626]">
+              <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-[#e5e5e5]">Risk Distribution</h3>
               <div className="space-y-3">
                 {[
                   { label: 'High', count: analysis.analysis.high_risk_count, color: 'bg-red-500', total: analysis.analysis.total_clauses },
@@ -224,10 +224,10 @@ export default function AnalysisPage() {
                 ].map((item) => (
                   <div key={item.label}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-700 dark:text-gray-300">{item.label}</span>
-                      <span className="text-gray-600 dark:text-gray-400">{item.count} ({item.total > 0 ? ((item.count / item.total) * 100).toFixed(0) : 0}%)</span>
+                      <span className="text-gray-700 dark:text-[#e5e5e5]">{item.label}</span>
+                      <span className="text-gray-600 dark:text-[#a3a3a3]">{item.count} ({item.total > 0 ? ((item.count / item.total) * 100).toFixed(0) : 0}%)</span>
                     </div>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div className="w-full bg-gray-200 dark:bg-[#262626] rounded-full h-2">
                       <div
                         className={`${item.color} h-2 rounded-full transition-all`}
                         style={{ width: `${item.total > 0 ? (item.count / item.total) * 100 : 0}%` }}

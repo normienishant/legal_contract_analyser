@@ -8,7 +8,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="bg-white dark:bg-black shadow-lg border-b border-gray-100 dark:border-gray-900 sticky top-0 z-50">
+    <header className="bg-white dark:bg-[#0a0a0a] shadow-lg border-b border-gray-100 dark:border-[#1a1a1a] sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
@@ -25,37 +25,37 @@ export default function Header() {
             <nav className="flex gap-6">
               <Link 
                 href="/" 
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                className="text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
               >
                 Home
               </Link>
               <Link 
                 href="/upload" 
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                className="text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
               >
                 Upload
               </Link>
               <Link 
                 href="/dashboard" 
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                className="text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
               >
                 Dashboard
               </Link>
               <Link 
                 href="/history" 
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                className="text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
               >
                 History
               </Link>
               <Link 
                 href="/bookmarks" 
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                className="text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
               >
                 Bookmarks
               </Link>
               <Link 
                 href="/settings" 
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                className="text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
               >
                 Settings
               </Link>
@@ -68,7 +68,7 @@ export default function Header() {
             <DarkModeToggle />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#141414] transition-colors"
               aria-label="Toggle menu"
             >
               <span className="text-2xl">{mobileMenuOpen ? '✕' : '☰'}</span>
@@ -78,46 +78,46 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700 pt-4 space-y-2">
+          <nav className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-[#262626] pt-4 space-y-2">
             <Link 
               href="/" 
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium transition-colors"
+              className="block px-4 py-2 text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-[#141414] rounded-lg font-medium transition-colors"
             >
               Home
             </Link>
             <Link 
               href="/upload" 
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium transition-colors"
+              className="block px-4 py-2 text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-[#141414] rounded-lg font-medium transition-colors"
             >
               Upload
             </Link>
             <Link 
               href="/dashboard" 
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium transition-colors"
+              className="block px-4 py-2 text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-[#141414] rounded-lg font-medium transition-colors"
             >
               Dashboard
             </Link>
             <Link 
               href="/history" 
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium transition-colors"
+              className="block px-4 py-2 text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-[#141414] rounded-lg font-medium transition-colors"
             >
               History
             </Link>
             <Link 
               href="/bookmarks" 
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium transition-colors"
+              className="block px-4 py-2 text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-[#141414] rounded-lg font-medium transition-colors"
             >
               Bookmarks
             </Link>
             <Link 
               href="/settings" 
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium transition-colors"
+              className="block px-4 py-2 text-gray-700 dark:text-[#e5e5e5] hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-[#141414] rounded-lg font-medium transition-colors"
             >
               Settings
             </Link>
