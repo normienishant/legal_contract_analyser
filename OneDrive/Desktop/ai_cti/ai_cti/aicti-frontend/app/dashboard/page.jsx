@@ -10,11 +10,12 @@ const POLL_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
 export default function Dashboard() {
   const [data, setData] = useState({ feeds: [], iocs: [], clusters: {} });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastRefreshedAt, setLastRefreshedAt] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSource, setSelectedSource] = useState('all');
+  const [selectedThreatLevel, setSelectedThreatLevel] = useState('all');
 
   const load = useCallback(
     async ({ silent = false } = {}) => {
@@ -115,19 +116,39 @@ export default function Dashboard() {
     return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, [feeds]);
 
+  const availableThreatLevels = useMemo(() => {
+    const levels = new Set();
+    feeds.forEach((item) => {
+      const level = item?.risk?.level || item?.risk_level;
+      if (level) {
+        levels.add(level);
+      }
+    });
+    return Array.from(levels).sort((a, b) => {
+      const order = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+      return (order[a] ?? 99) - (order[b] ?? 99);
+    });
+  }, [feeds]);
+
   const filteredFeeds = useMemo(() => {
     const term = searchQuery.trim().toLowerCase();
     return feeds.filter((item) => {
       const matchesSource =
         selectedSource === 'all' || (item.source || '').toLowerCase() === selectedSource;
       if (!matchesSource) return false;
+      
+      const riskLevel = item?.risk?.level || item?.risk_level;
+      const matchesThreatLevel =
+        selectedThreatLevel === 'all' || riskLevel === selectedThreatLevel;
+      if (!matchesThreatLevel) return false;
+      
       if (!term) return true;
       const haystack = [item.title, item.description, item.source]
         .join(' ')
         .toLowerCase();
       return haystack.includes(term);
     });
-  }, [feeds, searchQuery, selectedSource]);
+  }, [feeds, searchQuery, selectedSource, selectedThreatLevel]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
@@ -139,7 +160,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [filteredFeeds.length, selectedSource, searchQuery]);
+  }, [filteredFeeds.length, selectedSource, selectedThreatLevel, searchQuery]);
 
   const headlineCount = feeds.length;
   const distinctSources = availableSources.length;
@@ -209,6 +230,30 @@ export default function Dashboard() {
               </div>
               <div style={{ flex: 1 }}>
                 <label className="small-muted" style={{ display: 'block', marginBottom: 6, color: 'var(--text-muted)' }}>
+                  Filter by threat level
+                </label>
+                <select
+                  value={selectedThreatLevel}
+                  onChange={(event) => setSelectedThreatLevel(event.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: 10,
+                    border: '1px solid var(--border-soft)',
+                    background: 'var(--bg-card)',
+                    color: 'var(--text-default)',
+                  }}
+                >
+                  <option value="all">All threat levels</option>
+                  {availableThreatLevels.map((level) => (
+                    <option key={level} value={level}>
+                      {level}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div style={{ flex: 1 }}>
+                <label className="small-muted" style={{ display: 'block', marginBottom: 6, color: 'var(--text-muted)' }}>
                   Search headlines & summaries
                 </label>
                 <input
@@ -249,7 +294,7 @@ export default function Dashboard() {
 
         <div className="page-grid">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-            {loading && feeds.length === 0 && !data.feeds?.length ? (
+            {loading && (!data.feeds?.length && !data.iocs?.length) ? (
               <LoadingState message="Loading threat intelligence data..." />
             ) : filteredFeeds.length === 0 ? (
               <div className="sidebar-card" style={{ textAlign: 'center', color: 'var(--text-default)' }}>
