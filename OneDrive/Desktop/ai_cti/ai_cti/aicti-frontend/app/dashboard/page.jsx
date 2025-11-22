@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import ArticleCard from '../../components/ArticleCard';
 import RightSidebar from '../../components/ui/RightSidebar';
 import Ticker from '../../components/ui/Ticker';
+import LoadingState from '../../components/ui/LoadingState';
 
 const POLL_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
@@ -32,6 +33,20 @@ export default function Dashboard() {
         const json = await res.json();
         if (json.error) {
           setError(json.error);
+        }
+        // Debug: Log image URLs in received data
+        console.log('[Dashboard] Received feeds:', json.feeds?.length || 0);
+        if (json.feeds && json.feeds.length > 0) {
+          const withImages = json.feeds.filter(f => f.image_url || f.image).length;
+          console.log('[Dashboard] Feeds with images:', withImages, '/', json.feeds.length);
+          // Log first 3 articles' image data
+          json.feeds.slice(0, 3).forEach((feed, idx) => {
+            console.log(`[Dashboard] Article ${idx + 1}:`, {
+              title: feed.title?.substring(0, 50),
+              image_url: feed.image_url || 'MISSING',
+              image: feed.image || 'MISSING',
+            });
+          });
         }
         setData(json);
         setLastRefreshedAt(new Date().toISOString());
@@ -234,12 +249,8 @@ export default function Dashboard() {
 
         <div className="page-grid">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-            {loading && feeds.length === 0 ? (
-              <>
-                {Array.from({ length: 3 }).map((_, idx) => (
-                  <SkeletonArticleCard key={`skeleton-${idx}`} />
-                ))}
-              </>
+            {loading && feeds.length === 0 && !data.feeds?.length ? (
+              <LoadingState message="Loading threat intelligence data..." />
             ) : filteredFeeds.length === 0 ? (
               <div className="sidebar-card" style={{ textAlign: 'center', color: 'var(--text-default)' }}>
                 No matching intelligence. Adjust filters or trigger a new fetch.

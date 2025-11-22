@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import LoadingState from '../../components/ui/LoadingState';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -152,6 +153,14 @@ export default function IntelDesk() {
   const threatCount = sentimentGauge?.threat ?? 0;
   const watchCount = sentimentGauge?.watch ?? 0;
   const iocHeatmap = useMemo(() => calcIocHeatmap(data.iocs), [data.iocs]);
+
+  if (loading && (!data.feeds?.length && !data.iocs?.length)) {
+    return (
+      <section className="container" style={{ padding: '48px 24px' }}>
+        <LoadingState message="Loading threat intelligence analytics..." />
+      </section>
+    );
+  }
 
   return (
     <section className="container" style={{ padding: '48px 24px', display: 'grid', gap: 24 }}>
@@ -382,3 +391,4 @@ export default function IntelDesk() {
     </section>
   );
 }
+image.pngre
