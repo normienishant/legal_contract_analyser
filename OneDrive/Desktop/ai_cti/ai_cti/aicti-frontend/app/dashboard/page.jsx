@@ -203,8 +203,8 @@ export default function Dashboard() {
           </div>
 
           <div style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap', gap: 16 }}>
-            <div style={{ display: 'flex', flex: '1 1 280px', gap: 10 }}>
-              <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, width: '100%' }}>
+              <div style={{ flex: '1 1 200px', minWidth: '200px' }}>
                 <label className="small-muted" style={{ display: 'block', marginBottom: 6, color: 'var(--text-muted)' }}>
                   Filter by source
                 </label>
@@ -228,7 +228,7 @@ export default function Dashboard() {
                   ))}
                 </select>
               </div>
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: '1 1 200px', minWidth: '200px' }}>
                 <label className="small-muted" style={{ display: 'block', marginBottom: 6, color: 'var(--text-muted)' }}>
                   Filter by threat level
                 </label>
@@ -252,7 +252,7 @@ export default function Dashboard() {
                   ))}
                 </select>
               </div>
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: '1 1 200px', minWidth: '200px' }}>
                 <label className="small-muted" style={{ display: 'block', marginBottom: 6, color: 'var(--text-muted)' }}>
                   Search headlines & summaries
                 </label>
