@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Bookmark, BookmarkCheck } from 'lucide-react';
 import { humanizeTitle } from '../utils/humanizeTitle';
@@ -47,6 +47,29 @@ function pickImage(item) {
     }
   }
 
+  // If no image found, try to construct OG image URL from article link
+  const link = item?.link || item?.url;
+  if (link && link !== '#') {
+    try {
+      // Try common OG image patterns
+      const url = new URL(link);
+      const hostname = url.hostname;
+      
+      // For some sites, we can construct image URLs
+      if (hostname.includes('thehackernews.com')) {
+        // The Hacker News often has images at predictable paths
+        return `https://thehackernews.com/images/-/thehackernews-logo.png`;
+      } else if (hostname.includes('bleepingcomputer.com')) {
+        return `https://www.bleepingcomputer.com/images/news/og-image.png`;
+      } else if (hostname.includes('darkreading.com')) {
+        return `https://www.darkreading.com/images/dark-reading-logo.png`;
+      }
+    } catch (e) {
+      // URL parsing failed, continue to fallback
+    }
+  }
+
+  // Fallback to Clearbit logo (may be blocked by ad blockers)
   const hostname = extractHostname(item);
   if (hostname) {
     return `https://logo.clearbit.com/${hostname}`;
@@ -102,13 +125,24 @@ export default function ArticleCard({ item }) {
   const tags = Array.isArray(item?.tags) ? item.tags.slice(0, 4) : [];
 
 
-  if (process.env.NODE_ENV === 'development') {
+  // Enhanced debug logging for thumbnails - ALWAYS LOG
+  useEffect(() => {
     if (!item?.image_url && !item?.image) {
-      console.log('[ArticleCard] No image_url for:', title.substring(0, 50), '| item keys:', Object.keys(item));
+      console.warn('[ArticleCard] ⚠️ No image_url for:', title.substring(0, 50));
+      console.warn('[ArticleCard] Available keys:', Object.keys(item));
+      console.warn('[ArticleCard] Full item:', JSON.stringify(item, null, 2));
     } else if (image && image !== FALLBACK_IMAGE) {
-      console.log('[ArticleCard] Using image:', image.substring(0, 80), 'for:', title.substring(0, 50));
+      console.log('[ArticleCard] ✓ Using image:', image.substring(0, 80), 'for:', title.substring(0, 50));
+      // Check if it's a Supabase URL
+      if (image.includes('supabase.co/storage')) {
+        console.log('[ArticleCard] → Supabase storage URL detected');
+      }
+    } else {
+      console.warn('[ArticleCard] ⚠️ Using FALLBACK_IMAGE for:', title.substring(0, 50));
+      console.warn('[ArticleCard] item.image_url:', item?.image_url);
+      console.warn('[ArticleCard] item.image:', item?.image);
     }
-  }
+  }, [item, image, title]);
 
   const { toggleSaved, isSaved } = useSavedBriefings();
   const isAlreadySaved = link !== '#' && isSaved(link);

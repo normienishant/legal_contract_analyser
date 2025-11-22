@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-
-const BACKEND = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+import { fetchWithFailover } from '@/lib/api-failover';
 
 export async function GET(request) {
   const { searchParams } = request.nextUrl;
@@ -12,8 +11,9 @@ export async function GET(request) {
   }
 
   try {
-    const url = `${BACKEND}/export/pdf/article?client_id=${encodeURIComponent(clientId)}&link=${encodeURIComponent(link)}`;
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetchWithFailover(`/export/pdf/article?client_id=${encodeURIComponent(clientId)}&link=${encodeURIComponent(link)}`, {
+      method: 'GET',
+    });
 
     if (!res.ok) {
       const errorText = await res.text();

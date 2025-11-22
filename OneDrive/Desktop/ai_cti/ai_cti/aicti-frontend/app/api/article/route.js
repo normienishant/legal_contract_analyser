@@ -1,7 +1,8 @@
+import { fetchWithFailover } from '@/lib/api-failover';
+
 export async function GET(request) {
   const { searchParams } = request.nextUrl;
   const link = searchParams.get('link');
-  const BACKEND = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
   if (!link) {
     return new Response(
@@ -14,8 +15,8 @@ export async function GET(request) {
   }
 
   try {
-    const res = await fetch(`${BACKEND}/article?link=${encodeURIComponent(link)}`, {
-      cache: 'no-store',
+    const res = await fetchWithFailover(`/article?link=${encodeURIComponent(link)}`, {
+      method: 'GET',
     });
 
     if (!res.ok) {

@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-
-const BACKEND = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+import { fetchWithFailover } from '@/lib/api-failover';
 
 export async function GET(request) {
   const { searchParams } = request.nextUrl;
@@ -11,8 +10,9 @@ export async function GET(request) {
   }
 
   try {
-    const url = `${BACKEND}/export/pdf?client_id=${encodeURIComponent(clientId)}`;
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetchWithFailover(`/export/pdf?client_id=${encodeURIComponent(clientId)}`, {
+      method: 'GET',
+    });
 
     if (!res.ok) {
       throw new Error(`Backend returned ${res.status}`);

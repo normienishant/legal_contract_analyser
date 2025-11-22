@@ -1,15 +1,21 @@
 import { Suspense } from 'react';
 import StoryClient from './StoryClient';
+import { fetchWithFailover } from '@/lib/api-failover';
 
 async function fetchArticle(link) {
   if (!link) return null;
-  const backend = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
-  const res = await fetch(`${backend}/article?link=${encodeURIComponent(link)}`, {
-    cache: 'no-store',
-  });
-  if (!res.ok) return null;
-  const json = await res.json();
-  return json.article || null;
+  try {
+    // Use failover system for backend calls
+    const res = await fetchWithFailover(`/article?link=${encodeURIComponent(link)}`, {
+      method: 'GET',
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.article || null;
+  } catch (err) {
+    console.error('[story/page] Error fetching article:', err);
+    return null;
+  }
 }
 
 function StoryFallback() {

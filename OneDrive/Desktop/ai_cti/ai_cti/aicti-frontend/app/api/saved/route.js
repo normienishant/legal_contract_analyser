@@ -1,15 +1,15 @@
 import { NextResponse } from 'next/server';
+import { fetchWithFailover } from '@/lib/api-failover';
 
-const BACKEND = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
-
-function buildUrl(path, params = {}) {
-  const url = new URL(`${BACKEND}${path}`);
+function buildQueryString(params = {}) {
+  const searchParams = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
-      url.searchParams.set(key, value);
+      searchParams.set(key, value);
     }
   });
-  return url;
+  const queryString = searchParams.toString();
+  return queryString ? `?${queryString}` : '';
 }
 
 export async function GET(request) {
@@ -19,8 +19,11 @@ export async function GET(request) {
   }
 
   try {
-    const url = buildUrl('/saved', { client_id: clientId });
-    const res = await fetch(url, { cache: 'no-store' });
+    const queryString = buildQueryString({ client_id: clientId });
+    const res = await fetchWithFailover(`/saved${queryString}`, {
+      method: 'GET',
+    });
+    
     if (!res.ok) {
       throw new Error(`Backend returned ${res.status}`);
     }
@@ -39,11 +42,10 @@ export async function POST(request) {
       return NextResponse.json({ error: 'client_id and link are required' }, { status: 400 });
     }
 
-    const res = await fetch(`${BACKEND}/saved`, {
+    const res = await fetchWithFailover('/saved', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
-      cache: 'no-store',
     });
 
     if (!res.ok) {
@@ -69,8 +71,11 @@ export async function DELETE(request) {
   }
 
   try {
-    const url = buildUrl('/saved', { client_id: clientId, link });
-    const res = await fetch(url, { method: 'DELETE', cache: 'no-store' });
+    const queryString = buildQueryString({ client_id: clientId, link });
+    const res = await fetchWithFailover(`/saved${queryString}`, {
+      method: 'DELETE',
+    });
+    
     if (!res.ok) {
       throw new Error(`Backend returned ${res.status}`);
     }
